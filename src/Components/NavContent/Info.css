@@ -1,0 +1,135 @@
+/* Info Page - Inspired by L'Epicurieux */
+.info-page {
+  font-family: 'Playfair Display', serif;
+  color: #2d2d2d;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.info-hero {
+  background: linear-gradient(rgba(0, 0, 0, 0.2)), url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80') center/cover no-repeat ;
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  margin-bottom: 3rem;
+}
+
+.info-hero h1 {
+  font-size: 4rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.info-container {
+  padding: 0 2rem 4rem;
+}
+
+.hours-section, 
+.contact-section, 
+.policies-section {
+  margin-bottom: 4rem;
+}
+
+.hours-section h2,
+.contact-section h2,
+.policies-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+}
+
+.hours-section h2:after,
+.contact-section h2:after,
+.policies-section h2:after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background-color: #fc8019;
+}
+
+.hours-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 800px;
+}
+
+.day-hours {
+  background: white;
+  padding: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+
+.day {
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.hours {
+  color: #666;
+}
+
+.contact-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 800px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f9f7f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fc8019;
+  font-size: 1.2rem;
+}
+
+.policies-list {
+  max-width: 800px;
+  background: white;
+  padding: 2rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+
+.policies-list li {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed #eee;
+}
+
+.policies-list li:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .info-hero h1 {
+    font-size: 2.5rem;
+  }
+}

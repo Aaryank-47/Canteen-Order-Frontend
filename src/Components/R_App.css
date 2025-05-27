@@ -1,0 +1,243 @@
+    /* For screens <= 939px (Tablets & small laptops) */
+/* For screens <= 939px (Compact Mode) */
+@media (max-width: 969px) {
+    .nav {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 5px 10px;
+    }
+
+    .nav h1 {
+        font-size: 1.5rem;
+    }
+
+    .nav-list {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-list .nav-item {
+        font-size: 1rem;
+        padding: 3px;
+    }
+
+    #login {
+        padding: 3px 8px;
+        font-size: 0.9rem;
+        margin-top: 0;
+    }
+
+    .loginPg {
+        width: 60vw;
+        height: auto;
+        padding: 10px;
+    }
+
+    .loginPg > input {
+        width: 85%;
+        padding: 4px;
+    }
+
+    .loginPg > button {
+        width: 85%;
+        padding: 5px;
+    }
+
+    .overlay{
+        top: 132px;
+        width: 93%;
+    }
+}
+
+@media (max-width: 806px) {
+    .showcase-item-1{
+        margin-top: 100px;
+        margin-right: 70px;
+        height: 200px;
+        margin-left: 0%;
+    }
+    .showcase-item-1>img{
+        width: 70%;
+        height: 80%;
+    }
+    .showcase-item-2{
+        margin-top: 100px;
+        margin-right: 70px;
+        height: 200px;
+        >abtFood>p{
+            font-size: 1.2rem;
+        }
+    }
+    .showcase-item-2>img{
+        width: 70%;
+        height: 80%;
+        margin-right: 0%;
+    }
+    .abtFood>h1{
+        font-size: 1.5rem;
+    }
+    .abtFood>p{
+        font-size: 1.2rem;
+    }
+    .line-text-line{
+        margin-top: 70px;
+    }
+    .footerboxes{
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 20px;
+    }
+    .footer-items{
+        width: 80%;
+        height: 30vh;
+    }
+}
+
+/* .nav-list{
+    display: none;
+} */
+.hamburger {
+    display: none;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+/* Hide Menu Items for Small Screens */
+@media (max-width: 715px) {
+    .nav {
+        padding: 10px;
+        width: 400%;
+    }
+
+    .hamburger {
+        display: block; /* Show Hamburger */
+        margin-left: auto;
+    }
+
+    .nav-list {
+        display: flex;
+        position: absolute;
+        top: -300px;
+        left: 0;
+        width: 100%;
+        background: white;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 20px 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transform: translateY(100%);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .nav-list.active {
+        transform: translateY(-90%); /* Show Menu */
+    }
+}   
+
+@media (max-width: 702px) {
+    .overlay{
+        top: 140px;
+        width: 90.5%;
+    }
+    .showcase-item-1{
+        margin-top: auto;
+        width: 100%;
+        margin-left: 0%;
+    }
+    .showcase-item-1>img{
+        width: 60%;
+        height: 70%;
+        margin-left: 1px;
+        margin-right: 0%;
+    }
+    .showcase-item-2{
+        margin-top: auto;
+        width: 100%;
+    }
+    .showcase-item-2>img{
+        width: 60%;
+        height: 70%;
+        margin-left: 1px;
+    }
+    .abtFood {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    .abtFood>h1{
+        font-size: 1.3rem;
+    }
+    .abtFood>p{
+        font-size: 1rem;
+    }
+    .footer-items{
+        height: max-content;
+    }
+}
+
+@media (max-width : 495px){
+    .overlay{
+        top: 140px;
+        width: 89%;
+    }
+    .showcase-item-1{
+        margin-right: 300px;
+        margin-left: 0%;
+    }
+    .showcase-item-1>img{
+        margin-right: 0%;
+    }
+    .showcase-item-2>img{
+        width: 40%;
+    }
+    .abtFood{
+        margin-left: 0%;
+    }
+    .abtFood>h1{
+        font-size: 1.2rem;
+    }
+    .abtFood>p{
+        font-size: 0.8rem;
+    }
+    .line-text-line{
+        margin-top: 80px;
+    }
+}
+@media (max-width: 415px){
+    .overlay{
+        width: 85%;
+    }
+    .abtFood>h1{
+        font-size: 1rem;
+    }
+    .abtFood>p{
+        font-size: 0.7rem;
+    }
+    .showcase-item-1{
+        margin-top: auto;
+    }
+    .showcase-item-2{
+        margin-top: auto;
+    }
+    .showcase-item-1>img{
+        width: 40%;
+        height: 70%;
+    }
+    .showcase-item-2>img{
+        width: 40%;
+        height: 70%;
+    }
+    .overlay>h1{
+        font-size: 3.5rem;
+    }
+    .footer-items{
+        height: max-content;
+    }
+    .line-text-line{
+        margin-top: 90px;
+    }
+}

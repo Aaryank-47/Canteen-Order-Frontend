@@ -1,0 +1,191 @@
+/* College Page - Inspired by L'Epicurieux */
+.college-page {
+  font-family: 'Playfair Display', serif;
+  color: #2d2d2d;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-modal {
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.registration-form, 
+.login-form {
+  padding: 3rem;
+}
+
+.registration-form h2, 
+.login-form h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.registration-form input, 
+.login-form input {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.registration-form input:focus, 
+.login-form input:focus {
+  border-color: #fc8019;
+  outline: none;
+}
+
+.registration-form button, 
+.login-form button {
+  width: 100%;
+  padding: 1rem;
+  background-color: #fc8019;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.registration-form button:hover, 
+.login-form button:hover {
+  background-color: #e67317;
+}
+
+.registration-form p, 
+.login-form p {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #666;
+}
+
+.registration-form button[type="button"], 
+.login-form button[type="button"] {
+  background: none;
+  color: #fc8019;
+  text-decoration: underline;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.college-dashboard {
+  width: 100%;
+  max-width: 1000px;
+  background: white;
+  padding: 3rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.college-dashboard h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.canteen-management h2 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+}
+
+.canteen-management h2:after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #fc8019;
+}
+
+.canteen-selection {
+  margin-bottom: 3rem;
+}
+
+.canteen-selection select {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  min-height: 150px;
+}
+
+.canteen-selection p {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.add-btn {
+  background-color: #fc8019;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #e67317;
+}
+
+.current-canteens h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.current-canteens ul {
+  list-style: none;
+  padding: 0;
+}
+
+.current-canteens li {
+  padding: 1rem;
+  background-color: #f9f7f4;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .college-page {
+    padding: 1rem;
+  }
+  
+  .registration-form, 
+  .login-form {
+    padding: 2rem 1.5rem;
+  }
+  
+  .college-dashboard {
+    padding: 2rem 1.5rem;
+  }
+}
