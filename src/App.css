@@ -200,7 +200,7 @@
     display: inline-block;
 }
 
-.abtFood > p{
+.abtFood>p {
     font-size: 2rem;
     line-height: 1.6;
     color: var(--medium-gray);
@@ -576,26 +576,48 @@
     background-color: #16120E;
     color: whitesmoke;
     justify-content: center;
+    list-style-type: none;
+    list-style: none;
 }
 
 .sm {
     display: flex;
     gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sm li {
+    list-style: none;
 }
 
 .sm>li>a {
     color: whitesmoke;
     font-size: 40px;
+    list-style-type: none;
+    list-style: none;
+}
+
+.sm>li>a::before {
+    text-decoration: none;
+    list-style: none;
 }
 
 .sm>li>a:hover {
     color: #007fbf;
 }
 
-.logoSM {
+.logoSM>a {
     list-style-type: none;
+    list-style: none;
 }
 
+
+.sm li::before {
+    content: none !important;
+    display: none !important;
+}
 
 .footer {
     /* position: fixed; */
@@ -664,6 +686,11 @@
     transition: width 0.3s ease-in-out;
 }
 
+.QL>li::before {
+    content: none !important;
+    display: none !important;
+}
+
 .QL_items>a:hover::after {
     width: 100%;
 }
@@ -674,7 +701,14 @@
     justify-content: center;
     /* margin-left: auto; */
 }
+/* Contact us in footer */
 
+.contact-ul li::before{
+    content: none !important;
+    display: none !important;
+}
+
+/* Privacy policies in footer */
 
 .PP {
     list-style-type: none;
@@ -705,6 +739,11 @@
 
 .P_items>a:hover::after {
     width: 100%;
+}
+
+.PP li::before{
+    content: none !important;
+    display: none !important;
 }
 
 /* #feedback{
@@ -881,18 +920,14 @@ textarea {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 } */
 
-.close-btn {
+button.close-btn {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: none;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    color: #333;
-}
-
-button {
+    color: #c42727;
     padding: 12px 20px;
     background-color: #007fbf;
     color: #fff;
@@ -903,7 +938,11 @@ button {
     font-size: 1rem;
 }
 
-button:hover {
+button.close-btn:focus {
+    outline: none;
+}
+
+.close-btn:hover {
     background-color: #005f8f;
 }
 

@@ -66,20 +66,20 @@ export default function NavPg() {
           </li>
           <li className="nav-item">
             <NavLink
-              to="/info"
-              onClick={() => setMobileView(false)}
-              className={({ isActive }) => (isActive ? "active" : "")}
-            >
-              Info
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink
               to="/orderhistory"
               onClick={() => setMobileView(false)}
               className={({ isActive }) => (isActive ? "active" : "")}
             >
               Order History
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/info"
+              onClick={() => setMobileView(false)}
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              Info
             </NavLink>
           </li>
           <li className="nav-item">
@@ -91,7 +91,7 @@ export default function NavPg() {
               College
             </NavLink>
           </li>
-          <button className="nav-item" onClick={handleOpenLogin}>LOGIN</button>
+          <button className="nav-item" id="login" onClick={handleOpenLogin}>LOGIN</button>
         </ul>
       </nav>
 
@@ -99,8 +99,8 @@ export default function NavPg() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/menu" element={<Menu />} />
-        <Route path="/info" element={<Info />} />
         <Route path="/orderhistory" element={<Orderhistory />} />
+        <Route path="/info" element={<Info />} />
         <Route path="/college" element={<College />} />
       </Routes>
 
