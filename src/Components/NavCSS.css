@@ -102,19 +102,19 @@
   cursor: pointer;
 }
 
-#login>a {
+/* #login>a {
   color: black;
   text-decoration: none;
   font-weight: bold;
-}
+} */
 
 #login:hover {
   background-color: black;
-  box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.7);
+  box-shadow: 0px 10px 10px 0px rgba(5, 129, 231, 0.7);
   transform: translateY(-3px);
-  
-
+  color: white;
 }
+
 
 
 

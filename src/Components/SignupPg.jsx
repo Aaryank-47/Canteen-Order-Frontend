@@ -2,6 +2,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import "./NavCSS.css";
+import { TbCactus } from "react-icons/tb";
 
 export default function SignupPg({ isOpen, onClose, onLoginClick }) {
   const [formData, setFormData] = useState({
@@ -28,17 +29,34 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
   const handleSignup = () => {
     const { name, college, contact, email, password, confirmPassword } = formData;
 
-    if (!name || !college || !contact || !email || !password || !confirmPassword)
-      return alert("Please fill all fields");
+    // if (!name || !college || !contact || !email || !password || !confirmPassword)
+    //   return alert("Please fill all fields");
 
-    if (!/^\d{10}$/.test(contact))
-      return alert("Contact number must be exactly 10 digits");
+    // if (!/^\d{10}$/.test(contact))
+    //   return alert("Contact number must be exactly 10 digits");
 
     if (password !== confirmPassword)
       return alert("Passwords do not match");
 
-    alert(`Signed up as ${name}`);
-    onLoginClick();
+    try {
+
+      const response = fetch("http://localhost:5000/api/v1/users/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, college, contact, email, password }),
+      });
+
+      console.log("Signup Response:", response);
+      // alert(`Signed up as ${name}`);
+      onLoginClick();
+    
+    } catch (error) {
+      console.error("Signup Error:", error);
+      alert("An error occurred during signup. Please try again.");
+      return;
+    }
   };
 
   if (!isOpen) return null;
@@ -65,8 +83,8 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
               <input
                 type={
                   field.includes("password") ? "password" :
-                  field === "contact" ? "tel" :
-                  field === "email" ? "email" : "text"
+                    field === "contact" ? "tel" :
+                      field === "email" ? "email" : "text"
                 }
                 name={field}
                 value={formData[field]}

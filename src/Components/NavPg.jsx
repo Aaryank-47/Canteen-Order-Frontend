@@ -41,16 +41,16 @@ export default function NavPg() {
             <NavLink
               to="/"
               onClick={() => setMobileView(false)}
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={`navlink ${({ isActive }) => (isActive ? "active" : "")}`}
             >
               Home
             </NavLink>
           </li>
-          <li className="nav-item">
+          <li className="nav-item" id="about-nav">
             <NavLink
               to="/about"
               onClick={() => setMobileView(false)}
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={`navlink ${({ isActive }) => (isActive ? "active" : "")}`}
             >
               About US
             </NavLink>
@@ -59,7 +59,7 @@ export default function NavPg() {
             <NavLink
               to="/menu"
               onClick={() => setMobileView(false)}
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={`navlink ${({ isActive }) => (isActive ? "active" : "")}`}
             >
               Menu
             </NavLink>
@@ -68,7 +68,7 @@ export default function NavPg() {
             <NavLink
               to="/orderhistory"
               onClick={() => setMobileView(false)}
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={`navlink ${({ isActive }) => (isActive ? "active" : "")}`}
             >
               Order History
             </NavLink>
@@ -77,7 +77,7 @@ export default function NavPg() {
             <NavLink
               to="/info"
               onClick={() => setMobileView(false)}
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={`navlink ${({ isActive }) => (isActive ? "active" : "")}`}
             >
               Info
             </NavLink>
@@ -86,7 +86,7 @@ export default function NavPg() {
             <NavLink
               to="/college"
               onClick={() => setMobileView(false)}
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={`navlink ${({ isActive }) => (isActive ? "active" : "")}`}
             >
               College
             </NavLink>

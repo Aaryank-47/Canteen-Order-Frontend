@@ -1,4 +1,22 @@
-    /* For screens <= 939px (Tablets & small laptops) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* For screens <= 939px (Tablets & small laptops) */
+@media (max-width: 1150px) {
+    #login {
+        padding: 0% 8px;
+    }
+}
+
+@media (max-width: 1146px) {
+    #login {
+        height: 50px;
+    }
+}
+
 /* For screens <= 939px (Compact Mode) */
 @media (max-width: 969px) {
     .nav {
@@ -34,63 +52,141 @@
         padding: 10px;
     }
 
-    .loginPg > input {
+    .loginPg>input {
         width: 85%;
         padding: 4px;
     }
 
-    .loginPg > button {
+    .loginPg>button {
         width: 85%;
         padding: 5px;
     }
 
-    .overlay{
+    .overlay {
         top: 132px;
         width: 93%;
     }
 }
 
+@media (max-width: 965px) {
+    .overlay {
+        top: -3px;
+        width: 101%;
+    }
+}
+
+@media (max-width: 899px){
+    .nav{
+        flex-direction: row;
+        align-items:center;
+        padding: 10px 0;
+    }
+    .nav-item{
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+    #about-nav{
+        text-align: center;
+    }
+}
+@media (max-width: 878px){
+    .nav{
+        padding: 10px 0;
+        width: 100%;
+    }
+    .nav-list{
+        margin: 10px;
+        padding: 20px;
+        justify-content: center;
+        align-items: center;
+    }
+    .nav-item{
+        width: 11.6%;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+    .navlink{
+        font-size: 0.2rem;
+    }
+}
+
+@media (max-width: 835px){
+    .nav{
+        padding: 10px 0;
+        width: 100%;
+    }
+    .nav-list{
+        margin: 10px;
+        padding: 20px;
+        justify-content: center;
+        align-items: center;
+    }
+    .nav-item{
+        width: 11.6%;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+    .navlink{
+        font-size: 0.2rem;
+    }
+    .nav{
+        padding: 10px 0;
+        width: 100%;
+    }
+}
+
 @media (max-width: 806px) {
-    .showcase-item-1{
+    .showcase-item-1 {
         margin-top: 100px;
         margin-right: 70px;
         height: 200px;
         margin-left: 0%;
     }
-    .showcase-item-1>img{
+
+    .showcase-item-1>img {
         width: 70%;
         height: 80%;
     }
-    .showcase-item-2{
+
+    .showcase-item-2 {
         margin-top: 100px;
         margin-right: 70px;
         height: 200px;
-        >abtFood>p{
+
+        >abtFood>p {
             font-size: 1.2rem;
         }
     }
-    .showcase-item-2>img{
+
+    .showcase-item-2>img {
         width: 70%;
         height: 80%;
         margin-right: 0%;
     }
-    .abtFood>h1{
+
+    .abtFood>h1 {
         font-size: 1.5rem;
     }
-    .abtFood>p{
+
+    .abtFood>p {
         font-size: 1.2rem;
     }
-    .line-text-line{
+
+    .line-text-line {
         margin-top: 70px;
     }
-    .footerboxes{
+
+    .footerboxes {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
         align-items: center;
         gap: 20px;
     }
-    .footer-items{
+
+    .footer-items {
         width: 80%;
         height: 30vh;
     }
@@ -113,7 +209,8 @@
     }
 
     .hamburger {
-        display: block; /* Show Hamburger */
+        display: block;
+        /* Show Hamburger */
         margin-left: auto;
     }
 
@@ -134,110 +231,136 @@
     }
 
     .nav-list.active {
-        transform: translateY(-90%); /* Show Menu */
+        transform: translateY(-90%);
+        /* Show Menu */
     }
-}   
+}
 
 @media (max-width: 702px) {
-    .overlay{
+    .overlay {
         top: 140px;
         width: 90.5%;
     }
-    .showcase-item-1{
+
+    .showcase-item-1 {
         margin-top: auto;
         width: 100%;
         margin-left: 0%;
     }
-    .showcase-item-1>img{
+
+    .showcase-item-1>img {
         width: 60%;
         height: 70%;
         margin-left: 1px;
         margin-right: 0%;
     }
-    .showcase-item-2{
+
+    .showcase-item-2 {
         margin-top: auto;
         width: 100%;
     }
-    .showcase-item-2>img{
+
+    .showcase-item-2>img {
         width: 60%;
         height: 70%;
         margin-left: 1px;
     }
+
     .abtFood {
         flex-direction: column;
         align-items: center;
         gap: 20px;
     }
-    .abtFood>h1{
+
+    .abtFood>h1 {
         font-size: 1.3rem;
     }
-    .abtFood>p{
+
+    .abtFood>p {
         font-size: 1rem;
     }
-    .footer-items{
+
+    .footer-items {
         height: max-content;
     }
 }
 
-@media (max-width : 495px){
-    .overlay{
+@media (max-width : 495px) {
+    .overlay {
         top: 140px;
         width: 89%;
     }
-    .showcase-item-1{
+
+    .showcase-item-1 {
         margin-right: 300px;
         margin-left: 0%;
     }
-    .showcase-item-1>img{
+
+    .showcase-item-1>img {
         margin-right: 0%;
     }
-    .showcase-item-2>img{
+
+    .showcase-item-2>img {
         width: 40%;
     }
-    .abtFood{
+
+    .abtFood {
         margin-left: 0%;
     }
-    .abtFood>h1{
+
+    .abtFood>h1 {
         font-size: 1.2rem;
     }
-    .abtFood>p{
+
+    .abtFood>p {
         font-size: 0.8rem;
     }
-    .line-text-line{
+
+    .line-text-line {
         margin-top: 80px;
     }
 }
-@media (max-width: 415px){
-    .overlay{
+
+@media (max-width: 415px) {
+    .overlay {
         width: 85%;
     }
-    .abtFood>h1{
+
+    .abtFood>h1 {
         font-size: 1rem;
     }
-    .abtFood>p{
+
+    .abtFood>p {
         font-size: 0.7rem;
     }
-    .showcase-item-1{
+
+    .showcase-item-1 {
         margin-top: auto;
     }
-    .showcase-item-2{
+
+    .showcase-item-2 {
         margin-top: auto;
     }
-    .showcase-item-1>img{
+
+    .showcase-item-1>img {
         width: 40%;
         height: 70%;
     }
-    .showcase-item-2>img{
+
+    .showcase-item-2>img {
         width: 40%;
         height: 70%;
     }
-    .overlay>h1{
+
+    .overlay>h1 {
         font-size: 3.5rem;
     }
-    .footer-items{
+
+    .footer-items {
         height: max-content;
     }
-    .line-text-line{
+
+    .line-text-line {
         margin-top: 90px;
     }
 }

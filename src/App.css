@@ -1,3 +1,7 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
 /* Enhanced Home Page with Animations */
 :root {
     --primary-orange: #fc8019;
