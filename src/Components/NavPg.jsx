@@ -34,7 +34,7 @@ export default function NavPg() {
       <nav className="nav">
         <h1 className="logo">RESTRO</h1>
         <div className="hamburger" onClick={() => setMobileView(!isMobileView)}>
-          {isMobileView ? <FaTimes /> : <FaBars />}
+          {isMobileView ? <FaBars /> : <FaTimes />}
         </div>
         <ul className={`nav-list ${isMobileView ? "active" : ""}`}>
           <li className="nav-item">
@@ -82,7 +82,7 @@ export default function NavPg() {
               Info
             </NavLink>
           </li>
-          <li className="nav-item">
+          <li className="nav-item" id="college-nav">
             <NavLink
               to="/college"
               onClick={() => setMobileView(false)}

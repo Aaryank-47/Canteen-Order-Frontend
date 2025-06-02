@@ -75,65 +75,54 @@
     }
 }
 
-@media (max-width: 899px){
-    .nav{
+@media (max-width: 899px) {
+    .nav {
         flex-direction: row;
-        align-items:center;
+        align-items: center;
         padding: 10px 0;
     }
-    .nav-item{
+
+    .nav-item {
         font-size: 1rem;
         padding: 5px 10px;
     }
-    #about-nav{
+
+    #about-nav {
         text-align: center;
     }
 }
-@media (max-width: 878px){
-    .nav{
+
+@media (max-width: 878px) {
+    .nav {
         padding: 10px 0;
         width: 100%;
     }
-    .nav-list{
+
+    .nav-list {
         margin: 10px;
         padding: 20px;
         justify-content: center;
         align-items: center;
     }
-    .nav-item{
+
+    .nav-item {
         width: 11.6%;
         text-align: center;
         justify-content: center;
         align-items: center;
     }
-    .navlink{
+
+    .navlink {
         font-size: 0.2rem;
     }
 }
 
-@media (max-width: 835px){
-    .nav{
-        padding: 10px 0;
-        width: 100%;
-    }
-    .nav-list{
-        margin: 10px;
-        padding: 20px;
+@media (max-width: 835px) {
+    .nav-list {
+        margin: 0px;
+        padding: 0px;
         justify-content: center;
         align-items: center;
-    }
-    .nav-item{
-        width: 11.6%;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
-    }
-    .navlink{
-        font-size: 0.2rem;
-    }
-    .nav{
-        padding: 10px 0;
-        width: 100%;
     }
 }
 
@@ -192,9 +181,23 @@
     }
 }
 
-/* .nav-list{
-    display: none;
-} */
+@media (max-width: 774px) {
+    .nav-list {
+        margin: -10px;
+        gap: 10px;
+    }
+
+    .nav-list>li>a {
+        font-size: 1.05rem;
+    }
+
+    #login {
+        margin-left: 10px;
+    }
+}
+
+
+
 .hamburger {
     display: none;
     font-size: 2rem;
@@ -217,9 +220,10 @@
     .nav-list {
         display: flex;
         position: absolute;
-        top: -300px;
+        top: -420px;
         left: 0;
-        width: 100%;
+        margin-left: 330px;
+        width: 50%;
         background: white;
         flex-direction: column;
         align-items: center;
@@ -228,6 +232,13 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         transform: translateY(100%);
         transition: transform 0.3s ease-in-out;
+    }
+    #login{
+        width: 20%;
+        margin-left: 40px;
+    }
+    .nav-list > li > a{
+        font-size: 0.95rem;
     }
 
     .nav-list.active {
@@ -238,8 +249,8 @@
 
 @media (max-width: 702px) {
     .overlay {
-        top: 140px;
-        width: 90.5%;
+        top: 0px;
+        width: 100.5%;
     }
 
     .showcase-item-1 {
