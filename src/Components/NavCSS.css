@@ -1,14 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Bokor&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bokor&family=Permanent+Marker&display=swap');
+/* @import url('https://st3.depositphotos.com/4431055/12920/i/450/depositphotos_129206658-stock-photo-wooden-texture-with-various-dishes.jpg'); */
 
-  @import url('https://fonts.googleapis.com/css2?family=Bokor&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Bokor&family=Permanent+Marker&display=swap');
-  /* @import url('https://st3.depositphotos.com/4431055/12920/i/450/depositphotos_129206658-stock-photo-wooden-texture-with-various-dishes.jpg'); */
 
-
-  *{
-    list-style: none;
-    margin: 0px;
-    padding: 0px;
-  }
+* {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
 
 /* Navbar CSS - Inspired by L'Epicurieux */
 
@@ -55,9 +55,11 @@
   text-decoration: none;
   color: rgb(0, 0, 0);
   font-size: 1.2rem;
-  transition: all 0.3s ease; /* Changed to 'all' for smoother transitions */
+  transition: all 0.3s ease;
+  /* Changed to 'all' for smoother transitions */
   padding: 5px;
-  border: 2.5px solid transparent; /* Invisible border by default */
+  border: 2.5px solid transparent;
+  /* Invisible border by default */
 }
 
 /* Hover effect */
@@ -121,7 +123,7 @@
 
 
 /* Login Page Styles */
- .login-modal-overlay {
+.login-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -135,7 +137,7 @@
 }
 
 .login-wrapper {
-  
+
   background: rgba(30, 30, 30, 0.85);
   /* fallback for browsers that don't support backdrop-filter */
   -webkit-backdrop-filter: blur(10px);
@@ -234,12 +236,12 @@
 
 .login-switch-link:hover {
   color: #2196f3;
-} 
- 
+}
+
 
 /* SIGNUP PAGE CSS */
 /* SignupCSS.css (Signup styles) */
- .signup-modal-overlay {
+.signup-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -302,7 +304,7 @@
   transition: 0.2s ease-in-out;
 }
 
-.signup-floating-label input:focus+label,   
+.signup-floating-label input:focus+label,
 .signup-floating-label select:focus+label,
 .signup-floating-label input:not(:placeholder-shown)+label,
 .signup-floating-label select:not([value=""])+label {
@@ -372,4 +374,4 @@
 .logo {
   height: 50px;
   margin-right: 20px;
-} 
+}

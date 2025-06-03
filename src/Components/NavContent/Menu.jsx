@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Menu.css';
 
 // Import food images (you'll need to add these to your project)
@@ -27,7 +27,6 @@ export default function Menu() {
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [orderHistory, setOrderHistory] = useState([]);
 
-  // Simulated user data (in a real app, this would come from auth context)
   const user = {
     name: "John Doe",
     phone: "9876543210",
@@ -93,6 +92,32 @@ export default function Menu() {
     setCart([]);
     setCheckoutStep('confirmation');
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        } else {
+          entry.target.classList.remove('in-view');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px' // Adjust this value as needed
+    });
+
+    const menuItems = document.querySelectorAll('.menu-item');
+    menuItems.forEach((item, index) => {
+      item.style.setProperty('--index', index);
+      observer.observe(item);
+    });
+
+    return () => {
+      menuItems.forEach(item => observer.unobserve(item));
+      observer.disconnect();
+    };
+  }, [menuItems]); // Add menuItems as dependency
 
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
   const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);

@@ -157,6 +157,119 @@
   font-style: italic;
 }
 
+/* Add these to your existing About.css */
+
+/* Animation styles */
+.hero-section {
+  overflow: hidden;
+}
+
+.stat-item {
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: #fc8019;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s ease;
+}
+
+.stat-item:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+  color: #fc8019;
+  margin-bottom: 1rem;
+}
+
+.team-member {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.member-badge {
+  position: absolute;
+  top: -15px;
+  right: 20px;
+  background: #fc8019;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 8px rgba(252, 128, 25, 0.3);
+}
+
+.member-photo {
+  transition: transform 0.5s ease;
+}
+
+/* Text animation */
+@keyframes textShine {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.hero-content h1 {
+  background: linear-gradient(90deg, #fff, #ffd700, #fff);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: textShine 3s linear infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.team-member:hover .member-photo {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+    animation: none;
+    color: white;
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .member-photo {
+    height: 250px;
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .hero-content h1 {

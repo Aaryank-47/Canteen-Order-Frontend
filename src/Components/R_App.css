@@ -4,6 +4,18 @@
     box-sizing: border-box;
 }
 
+@media(max-width: 1192px) {
+    .nav {
+        padding: 10px 0;
+        width: 100%;
+    }
+
+    .nav-list {
+        gap: 20px;
+        justify-content: space-evenly;
+    }
+}
+
 /* For screens <= 939px (Tablets & small laptops) */
 @media (max-width: 1150px) {
     #login {
@@ -14,6 +26,37 @@
 @media (max-width: 1146px) {
     #login {
         height: 50px;
+    }
+}
+
+@media (max-width: 1059px) {
+    .nav-list {
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav-item {
+        justify-content: center;
+        align-items: center;
+        width: fit-content;
+    }
+
+    .nav-list>li>a {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 1012px) {
+    .nav-list>li>a {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 980px) {
+    .nav-list>li>a {
+        font-size: 1.2rem;
     }
 }
 
@@ -86,23 +129,27 @@
         font-size: 1rem;
         padding: 5px 10px;
     }
-
-    #about-nav {
-        text-align: center;
-    }
 }
 
 @media (max-width: 878px) {
     .nav {
-        padding: 10px 0;
+        padding: 10px 0px;
         width: 100%;
+        gap: 10px;
     }
 
+    .logo{
+        margin-right: 0%;
+    }
     .nav-list {
-        margin: 10px;
-        padding: 20px;
+        margin: 5px 10px 0px 0px;
+        padding: 0px;
         justify-content: center;
         align-items: center;
+        gap: 10px;
+        width: 79%;
+        width: max-content;
+        flex-wrap: nowrap;
     }
 
     .nav-item {
@@ -110,10 +157,21 @@
         text-align: center;
         justify-content: center;
         align-items: center;
+        flex-shrink: 10;
     }
 
-    .navlink {
-        font-size: 0.2rem;
+    .nav-list>li>a {
+        font-size: 1.08rem;
+    }
+    #about-nav {
+        text-align: center;
+        width: 20%;
+    }
+    #oh-nav {
+        text-align: center;
+        width: 20.3%;
+        margin: 0px;
+        padding: 0px;
     }
 }
 
@@ -208,22 +266,47 @@
 @media (max-width: 715px) {
     .nav {
         padding: 10px;
-        width: 400%;
+        width: 100%;
     }
 
     .hamburger {
         display: block;
-        /* Show Hamburger */
         margin-left: auto;
     }
 
     .nav-list {
         display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 504px;
+        left: 10px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        align-items: center;
+        gap: 10px;
+        padding: 20px 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transform: translateY(-200%);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s;
+        z-index: 999;
+    }
+
+    /* When menu is active, slide it in */
+    .nav-list.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* .nav-list {
+        display: flex;
         position: absolute;
         top: -420px;
         left: 0;
-        margin-left: 330px;
-        width: 50%;
+        margin-left: 0px;
+        width: 100%;
         background: white;
         flex-direction: column;
         align-items: center;
@@ -232,18 +315,23 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         transform: translateY(100%);
         transition: transform 0.3s ease-in-out;
-    }
-    #login{
+    } */
+    #login {
         width: 20%;
-        margin-left: 40px;
+        /* margin-left: 40px; */
     }
-    .nav-list > li > a{
+
+    .nav-list>li>a {
         font-size: 0.95rem;
     }
 
     .nav-list.active {
         transform: translateY(-90%);
         /* Show Menu */
+    }
+
+    .nav-item {
+        width: fit-content;
     }
 }
 
@@ -298,8 +386,8 @@
 
 @media (max-width : 495px) {
     .overlay {
-        top: 140px;
-        width: 89%;
+        top: 4px;
+        width: 100%;
     }
 
     .showcase-item-1 {
@@ -334,7 +422,7 @@
 
 @media (max-width: 415px) {
     .overlay {
-        width: 85%;
+        width: 100%;
     }
 
     .abtFood>h1 {

@@ -7,7 +7,7 @@
 }
 
 .info-hero {
-  background: linear-gradient(rgba(0, 0, 0, 0.2)), url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80') center/cover no-repeat ;
+  background: linear-gradient(rgba(0, 0, 0, 0.2)), url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80') center/cover no-repeat;
   height: 50vh;
   display: flex;
   align-items: center;
@@ -27,8 +27,8 @@
   padding: 0 2rem 4rem;
 }
 
-.hours-section, 
-.contact-section, 
+.hours-section,
+.contact-section,
 .policies-section {
   margin-bottom: 4rem;
 }
@@ -125,6 +125,77 @@
   margin-bottom: 0;
   padding-bottom: 0;
   border-bottom: none;
+}
+
+/* Add these to your existing Info.css */
+
+/* Animation styles */
+.info-hero {
+  overflow: hidden;
+}
+
+.day-hours {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-item {
+  transition: transform 0.3s ease;
+}
+
+.policies-list li {
+  transition: all 0.3s ease;
+}
+
+/* Icon styles */
+.icon svg {
+  width: 20px;
+  height: 20px;
+  color: #fc8019;
+}
+
+/* Hover effects */
+.day-hours:hover {
+  transform: translateY(-5px);
+}
+
+.contact-item:hover {
+  background-color: #f9f7f4;
+}
+
+.policies-list li:hover {
+  padding-left: 10px;
+  border-bottom-color: #fc8019;
+}
+
+/* Pulse animation for attention */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.highlight-item {
+  animation: pulse 2s infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .info-hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hours-grid,
+  .contact-info {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Responsive */

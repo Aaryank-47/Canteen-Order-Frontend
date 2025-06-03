@@ -2,7 +2,7 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import PropTypes from "prop-types";
-import "./NavCSS.css";
+import "./NavCSS.css";``
 
 export default function LoginPg({ isOpen, onClose, onSignupClick }) {
   const [contact, setContact] = useState("");

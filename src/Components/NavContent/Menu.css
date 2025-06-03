@@ -676,3 +676,273 @@
     transform: translateY(-2px);
   }
 }
+
+/* ==================== */
+/* SCROLL-BASED EFFECTS */
+/* ==================== */
+
+/* Fade-in animation for header */
+.menu-header {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+}
+
+/* Staggered fade-in for menu items */
+.menu-item {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 
+    transform 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 0.6s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Animate items when they come into view */
+.menu-item.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Parallax effect for item images */
+.item-image {
+  overflow: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.item-image img {
+  transition: transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.menu-item:hover .item-image img {
+  transform: scale(1.1) translateY(-5px);
+}
+
+/* ================= */
+/* INTERACTIVE HOVERS */
+/* ================= */
+
+/* 3D tilt effect */
+.menu-item {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.menu-item:hover {
+  transform: translateY(-8px) rotateX(2deg) rotateY(2deg);
+  box-shadow: 0 25px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Glow effect on hover */
+.menu-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 10px;
+  box-shadow: 0 0 0 rgba(200, 169, 126, 0);
+  transition: box-shadow 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  pointer-events: none;
+}
+
+.menu-item:hover::after {
+  box-shadow: 0 0 30px rgba(200, 169, 126, 0.3);
+}
+
+/* Add to cart button liquid effect */
+.add-to-cart-btn {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.add-to-cart-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #c8a97e, #b5835a);
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.6s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+}
+
+.add-to-cart-btn:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ================== */
+/* CART ANIMATIONS */
+/* ================== */
+
+/* Slide-up animation for cart */
+.cart-preview {
+  transition: 
+    transform 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 0.4s ease,
+    visibility 0.4s ease;
+}
+
+/* Cart items enter animation */
+.cart-items li {
+  opacity: 0;
+  transform: translateX(20px);
+  transition: 
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.cart-preview.active .cart-items li {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: calc(var(--index) * 0.1s);
+}
+
+/* ================== */
+/* CONFIRMATION EFFECTS */
+/* ================== */
+
+/* Bounce animation for confirmation icon */
+.confirmation-icon {
+  animation: 
+    bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+    pulse 1.5s ease-in-out 0.8s infinite;
+}
+
+/* Checkmark draw animation */
+.confirmation-icon::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 3px;
+  background: white;
+  transform-origin: left;
+  animation: drawCheck 0.6s ease-out 0.3s forwards;
+}
+
+/* ================== */
+/* SCROLLBAR STYLING */
+/* ================== */
+
+.cart-items::-webkit-scrollbar,
+.cart-preview::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cart-items::-webkit-scrollbar-thumb,
+.cart-preview::-webkit-scrollbar-thumb {
+  background: rgba(200, 169, 126, 0.5);
+  border-radius: 3px;
+}
+
+/* ================== */
+/* KEYFRAME ANIMATIONS */
+/* ================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+@keyframes drawCheck {
+  0% {
+    width: 0;
+    transform: scaleX(0);
+  }
+  100% {
+    width: 30px;
+    transform: scaleX(1);
+  }
+}
+
+/* ================== */
+/* MOBILE OPTIMIZATIONS */
+/* ================== */
+
+@media (max-width: 767px) {
+  /* Smoother mobile transitions */
+  .menu-item {
+    transition: 
+      transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+      opacity 0.4s ease;
+  }
+  
+  /* Reduced animation delays for mobile */
+  .menu-item.in-view {
+    transition-delay: calc(var(--index) * 0.05s);
+  }
+  
+  /* More pronounced tap feedback */
+  .add-to-cart-btn:active,
+  .quantity-controls button:active,
+  .remove-btn:active {
+    transform: scale(0.95);
+  }
+  
+  /* Cart preview slide-up animation */
+  .cart-preview {
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+}
+
+
+/* Continuous scroll animations */
+.menu-item {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 
+    transform 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 0.6s ease;
+  transition-delay: calc(var(--index) * 0.1s);
+}
+
+.menu-item.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
