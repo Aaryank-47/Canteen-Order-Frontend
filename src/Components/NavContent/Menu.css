@@ -159,7 +159,7 @@
   transition: transform 0.3s ease;
   z-index: 1000;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  /* -webkit-overflow-scrolling: touch; */
 }
 
 .cart-preview.active {
