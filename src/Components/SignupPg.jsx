@@ -1,19 +1,47 @@
 import { GoogleLogin } from "@react-oauth/google";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./NavCSS.css";
-import { TbCactus } from "react-icons/tb";
 
 export default function SignupPg({ isOpen, onClose, onLoginClick }) {
   const [formData, setFormData] = useState({
     name: "", college: "", contact: "", email: "", password: "", confirmPassword: ""
   });
 
+  const [colleges, setColleges] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [collegesLoading, setCollegesLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchAllColleges = async () => {
+      setCollegesLoading(true);
+      try {
+        const response = await fetch("/api/v1/college/all-colleges");
+        const data = await response.json();
+
+        if (!response.ok) throw new Error(data.message || "Failed to fetch colleges");
+
+        // Handle both array and object responses
+        const collegeList = Array.isArray(data) ? data : data.colleges || [];
+        setColleges(collegeList);
+
+      } catch (error) {
+        console.error("Error fetching colleges:", error);
+        setError("Failed to load colleges. Please try again later.");
+      } finally {
+        setCollegesLoading(false);
+      }
+    };
+
+    if (isOpen) fetchAllColleges();
+  }, [isOpen]);
+
   const handleOverlayClick = (e) => {
     if (e.target.classList.contains("signup-modal-overlay")) onClose();
   };
 
-  const handleChange = (e) => {
+  const handleChange =  (e) => {
     const { name, value } = e.target;
 
     if (name === "contact") {
@@ -26,7 +54,9 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
     }
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
+
+
     const { name, college, contact, email, password, confirmPassword } = formData;
 
     // if (!name || !college || !contact || !email || !password || !confirmPassword)
@@ -38,9 +68,10 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
     if (password !== confirmPassword)
       return alert("Passwords do not match");
 
+    setLoading(true)
     try {
 
-      const response = fetch("http://localhost:5000/api/v1/users/signup", {
+      const response = await  fetch("/api/v1/users/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,8 +81,26 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
 
       console.log("Signup Response:", response);
       // alert(`Signed up as ${name}`);
+
+      const data = await response.json();
+
+      // if (Array.isArray(data)) {
+        
+      //   setColleges(data);
+
+      // } else if (data.colleges && Array.isArray(data.colleges)) {
+        
+      //   setColleges(data.colleges);
+      // } else {
+      //   throw new Error("Invalid colleges data format");
+      // }
+
+      if (!response.ok) {
+        throw new Error(data.message || "Signup failed");
+      }
+
       onLoginClick();
-    
+
     } catch (error) {
       console.error("Signup Error:", error);
       alert("An error occurred during signup. Please try again.");
@@ -60,39 +109,29 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
   };
 
   if (!isOpen) return null;
+
   return (
+
     <div className="signup-modal-overlay" onClick={handleOverlayClick}>
       <div className="signup-wrapper" onClick={(e) => e.stopPropagation()}>
         <h2>Create an Account</h2>
 
-        {["name", "college", "contact", "email", "password", "confirmPassword"].map((field) => (
+        {error && <div className="error-message">{error}</div>}
+
+        {["name", "contact", "email", "password", "confirmPassword"].map((field) => (
           <div key={field} className="signup-floating-label">
-            {field === "college" ? (
-              <select
-                name={field}
-                value={formData[field]}
-                onChange={handleChange}
-                required
-              >
-                <option value="" disabled hidden />
-                <option>IIT Delhi</option>
-                <option>IIT Bombay</option>
-                <option>IIT Kanpur</option>
-              </select>
-            ) : (
-              <input
-                type={
-                  field.includes("password") ? "password" :
-                    field === "contact" ? "tel" :
-                      field === "email" ? "email" : "text"
-                }
-                name={field}
-                value={formData[field]}
-                onChange={handleChange}
-                required
-                maxLength={field === "contact" ? 10 : undefined}
-              />
-            )}
+            <input
+              type={
+                field.includes("password") ? "password" :
+                  field === "contact" ? "tel" :
+                    field === "email" ? "email" : "text"
+              }
+              name={field}
+              value={formData[field]}
+              onChange={handleChange}
+              required
+              maxLength={field === "contact" ? 10 : undefined}
+            />
             <label>
               {field === "confirmPassword" ? "Confirm Password" :
                 field.charAt(0).toUpperCase() + field.slice(1)}
@@ -100,8 +139,32 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
           </div>
         ))}
 
-        <button className="signup-button" onClick={handleSignup}>
-          Sign Up
+        <div className="signup-floating-label">
+          <select
+            name="college"
+            value={formData.college}
+            onChange={handleChange}
+            required
+          >
+            <option value="" disabled hidden>Select your college</option>
+            {Array.isArray(colleges) && colleges.map(college => (
+              <option
+                key={college._id}
+                value={college.collegeName}
+              >
+                {college.collegeName}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <button
+          className="signup-button"
+          onClick={handleSignup}
+          disabled={loading}
+        >
+          {loading ? "Signing up..." : "Sign Up"}
+
         </button>
 
         <p className="signup-footer-text">
@@ -132,3 +195,33 @@ SignupPg.propTypes = {
   onClose: PropTypes.func.isRequired,
   onLoginClick: PropTypes.func.isRequired,
 };
+
+
+
+
+
+
+{/* <div className="signup-floating-label">
+          <select
+            name="college"
+            value={formData.college}
+            onChange={handleChange}
+            required
+            style={{ border: '1px solid #ccc', padding: '8px' }} // Temporary styling
+          >
+            <option value="" disabled hidden>
+              {collegesLoading ? "Loading colleges..." : "Select your college"}
+            </option>
+            
+            {colleges.map(college => (
+              <option key={college._id} value={college.collegeName}>
+                {college.collegeName}
+              </option>
+            ))}
+            
+            {!collegesLoading && colleges.length === 0 && (
+              <option disabled>No colleges available</option>
+            )}
+          </select>
+          <label>College</label>
+        </div> */}

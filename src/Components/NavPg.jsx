@@ -1,7 +1,7 @@
 import "./NavCSS.css";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import { BrowserRouter as Router, NavLink, Route, Routes } from "react-router-dom";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import About from "./NavContent/About.jsx";
 import Menu from "./NavContent/Menu.jsx";
 import Info from "./NavContent/info.jsx";
@@ -10,12 +10,71 @@ import Home from "./Home.jsx";
 import LoginPg from "./LoginPg.jsx";
 import SignupPg from "./SignupPg.jsx";
 import College from "./NavContent/College.jsx";
+import UserProfileModal from "./NavContent/userProfileModal.jsx";
 import "./R_App.css";
 
 export default function NavPg() {
   const [isLoginOpen, setLoginOpen] = useState(false);
   const [isSignupOpen, setSignupOpen] = useState(false);
   const [isMobileView, setMobileView] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await fetch('/users/verify-token', {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          if (response.ok) {
+            const user = JSON.parse(localStorage.getItem('userData'));
+            setIsLoggedIn(true);
+            setUserData(user);
+          }
+        } catch (error) {
+          console.error('Auth verification failed:', error);
+          handleLogout();
+        }
+      }
+    };
+    checkAuthStatus();
+  }, []);
+
+  const handleLoginSuccess = async (user) => {
+    setIsLoggedIn(true);
+    setUserData(user);
+    setLoginOpen(false);
+  };
+
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      await fetch('/users/logout', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userData');
+      setIsLoggedIn(false);
+      setUserData(null);
+      setIsProfileOpen(false);
+      setLoading(false);
+    }
+  };
 
   const handleOpenLogin = () => {
     setLoginOpen(true);
@@ -92,7 +151,39 @@ export default function NavPg() {
               College
             </NavLink>
           </li>
-          <button className="nav-item" id="login" onClick={handleOpenLogin}>LOGIN</button>
+          {isLoggedIn ? (
+            <div className="profile-container">
+              <button
+                className="profile-icon-btn"
+                onClick={() => setIsProfileOpen(true)}
+                disabled={loading}
+              >
+                {userData?.avatar ? (
+                  <img
+                    src={userData.avatar}
+                    alt="Profile"
+                    className="profile-avatar-img"
+                  />
+                ) : (
+                  <div className="profile-initials">
+                    {userData?.name ? userData.name.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                )}
+              </button>
+              <button
+                className="logout-btn"
+                onClick={handleLogout}
+                disabled={loading}
+              >
+                <FaSignOutAlt />
+                {loading ? '...' : ''}
+              </button>
+            </div>
+          ) : (
+            <button className="nav-item" id="login" onClick={handleOpenLogin}>
+              LOGIN
+            </button>
+          )}
         </ul>
       </nav>
 
@@ -110,6 +201,7 @@ export default function NavPg() {
           isOpen={isLoginOpen}
           onClose={handleClose}
           onSignupClick={handleOpenSignup}
+          onLoginSuccess={handleLoginSuccess}
         />
       )}
 
@@ -118,6 +210,17 @@ export default function NavPg() {
           isOpen={isSignupOpen}
           onClose={handleClose}
           onLoginClick={handleOpenLogin}
+        />
+      )}
+      {isProfileOpen && (
+        <UserProfileModal
+          isOpen={isProfileOpen}
+          onClose={() => setIsProfileOpen(false)}
+          userData={userData}
+          onUpdateUser={(updatedUser) => {
+            localStorage.setItem('userData', JSON.stringify(updatedUser));
+            setUserData(updatedUser);
+          }}
         />
       )}
     </Router>
