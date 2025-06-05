@@ -11,11 +11,11 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
   const [colleges, setColleges] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [collegesLoading, setCollegesLoading] = useState(false);
+  // const [collegesLoading, setCollegesLoading] = useState(false);
 
   useEffect(() => {
     const fetchAllColleges = async () => {
-      setCollegesLoading(true);
+      // setCollegesLoading(true);
       try {
         const response = await fetch("/api/v1/college/all-colleges");
         const data = await response.json();
