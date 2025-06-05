@@ -57,7 +57,7 @@ export default function NavPg() {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      await fetch('/users/logout', {
+      await fetch('api/v1/users/logout', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

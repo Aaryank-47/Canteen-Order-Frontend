@@ -1,5 +1,6 @@
 // LoginPg.jsx
-import { GoogleLogin } from "@react-oauth/google";
+import {  GoogleLogin } from '@react-oauth/google';
+// import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useState } from "react";
 import PropTypes from "prop-types";
 import "./NavCSS.css";
@@ -66,31 +67,31 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
     }
   }
 
-  const handleGoogleLogin = async (credentialResponse) => {
-    const idtoken = credentialResponse.credential;
-    try {
-      // Handle successful login logic here
-      const response = await fetch("/api/v1/users/google-login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ idtoken })
-      });
+  // const handleGoogleLogin = async (credentialResponse) => {
+  //   const idtoken = credentialResponse.credential;
+  //   try {
+  //     // Handle successful login logic here
+  //     const response = await fetch("/api/v1/users/google-login", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       credentials: "include",
+  //       body: JSON.stringify({ idToken: idtoken })
+  //     });
 
-      const data = await response.json();
-      console.log("Backend Response:", data);
+  //     const data = await response.json();
+  //     console.log("Backend Response:", data);
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("userData", JSON.stringify(data.user));
+  //     localStorage.setItem("token", data.token);
+  //     localStorage.setItem("userData", JSON.stringify(data.user));
 
-      onLoginSuccess(data.user);
-      onClose();
-    } catch (error) {
-      console.error("Error during Google login:", error);
-    }
-  };
+  //     onLoginSuccess(data.user);
+  //     onClose();
+  //   } catch (error) {
+  //     console.error("Error during Google login:", error);
+  //   }
+  // };
 
   if (!isOpen) return null;
 
@@ -138,11 +139,35 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
         </div>
 
         <strong className="login-type">Login with Google</strong>
-        <GoogleLogin
-          onSuccess={handleGoogleLogin}
-          onError={() => console.log("Google Login Failed")}
-        />
+        {/* <GoogleOAuthProvider clientId="113373390210-s6dqhs50dfqateg8vidagfv3nqs8j974.apps.googleusercontent.com"> */}
+          <GoogleLogin
+          onSuccess={async (res) => {
+            console.log("Google Login Success:", res);
+            const idtoken = res.credential;
+            try {
+              // Handle successful login logic here
+              const response = await fetch("http://localhost:5000/api/v1/users/google-login", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({ idToken : idtoken })
+              });
 
+              const data = await response.json();
+              console.log("Backend Response:", data);
+            } catch (error) {
+              console.error("Error during Google login:", error);
+            }
+          }}
+          onError={() => console.log("Login Failed")}
+        />
+          {/* <GoogleLogin
+            onSuccess={handleGoogleLogin}
+            onError={() => console.log("Google Login Failed")}
+          /> */}
+        {/* </GoogleOAuthProvider> */}
         <p className="login-footer-text">
           Don't have an account?{" "}
           <span className="login-switch-link" onClick={onSignupClick}>
