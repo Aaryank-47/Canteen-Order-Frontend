@@ -5,8 +5,7 @@ import "./UserProfileModal.css";
 import { useParams, useNavigate } from "react-router-dom";
 
 export default function UserProfileModal({ isOpen, userData: initialUserData, onUpdateUser, onClose }) {
-  const { userId } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [userData, setUserData] = useState(initialUserData || null);
   const [isEditing, setIsEditing] = useState(false);
@@ -18,18 +17,20 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [colleges, setColleges] = useState([]);
+  const [collegesLoading, setCollegesLoading] = useState(false);
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
-  
+  console.log("Current userId:", userId);
+  console.log("Current token:", token);
 
   // Load user data from API
   const fetchUserData = async () => {
     try {
       setLoading(true);
-      const userId = localStorage.getItem("userId");
-      const token = localStorage.getItem("token");
 
-      console.log("Current userId:", userId);
-      console.log("Current token:", token);
+
 
       if (!userId || !token) {
         throw new Error("User ID or token not found in local storage.");
@@ -37,20 +38,20 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
 
       const response = await fetch(`/api/v1/profile/${userId}`, {
         method: "GET",
-        // credentials: "include",
+        credentials: "include",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      console.log("Profile Response : ",response)
+      console.log("Profile Response : ", response)
 
       if (!response.ok) {
         throw new Error("Failed to fetch profile data");
       }
 
       const data = await response.json();
-      console.log("data : ",data)
+      console.log("data : ", data)
 
       setUserData(data.userProfile);
       setEditData({
@@ -79,16 +80,15 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
     setEditData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = async () => {
+  const handleEdit = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
 
       if (!userId || !token) {
         throw new Error("User ID or token not found in local storage.");
       }
 
-      const response = await fetch(`http://localhost:5000/api/v1/profile/update-profile/${userId}`, {
+      const response = await fetch(`/api/v1/profile/update-profile/${userId}`, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -119,6 +119,33 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
   };
 
   if (!isOpen) return null;
+
+
+  useEffect(() => {
+    const fetchAllColleges = async () => {
+      setCollegesLoading(true);
+      try {
+        const response = await fetch("/api/v1/college/all-colleges");
+        const data = await response.json();
+
+        if (!response.ok) throw new Error(data.message || "Failed to fetch colleges");
+
+        // Handle both array and object responses
+        const collegeList = Array.isArray(data) ? data : data.colleges || [];
+        setColleges(collegeList);
+
+      } catch (error) {
+        console.error("Error fetching colleges:", error);
+        setError("Failed to load colleges. Please try again later.");
+      } finally {
+        setCollegesLoading(false);
+      }
+    };
+
+    if (isOpen) fetchAllColleges();
+  }, [isOpen]);
+
+
 
   if (loading) {
     return (
@@ -218,13 +245,23 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
               </div>
               <div className="profile-field">
                 <label>College</label>
-                <input
-                  type="text"
+                <select
                   name="college"
                   value={editData.college}
                   onChange={handleInputChange}
-                />
+                  disabled={collegesLoading}
+                >
+                  <option value="" disabled hidden>
+                    {collegesLoading ? "Loading colleges..." : "Select your college"}
+                  </option>
+                  {colleges.map((college) => (
+                    <option key={college._id} value={college.collegeName}>
+                      {college.collegeName}
+                    </option>
+                  ))}
+                </select>
               </div>
+
             </>
           ) : (
             <>
@@ -258,7 +295,7 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
 
         <div className="profile-actions">
           {isEditing ? (
-            <button className="save-btn" onClick={handleSave}>
+            <button className="save-btn" onClick={handleEdit}>
               <FaCheck /> Save Changes
             </button>
           ) : (

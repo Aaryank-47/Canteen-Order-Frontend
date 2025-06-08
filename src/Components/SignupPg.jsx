@@ -9,13 +9,13 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
   });
 
   const [colleges, setColleges] = useState([]);
+  const [collegesLoading, setCollegesLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [collegesLoading, setCollegesLoading] = useState(false);
 
   useEffect(() => {
     const fetchAllColleges = async () => {
-      // setCollegesLoading(true);
+      setCollegesLoading(true);
       try {
         const response = await fetch("/api/v1/college/all-colleges");
         const data = await response.json();
@@ -76,7 +76,7 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials:"include",
+        credentials: "include",
         body: JSON.stringify({ name, college, contact, email, password }),
       });
 
@@ -85,7 +85,7 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
 
       const data = await response.json();
 
-      console.log("data : ",data);
+      console.log("data : ", data);
 
       // if (Array.isArray(data)) {
 
@@ -148,18 +148,23 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
               value={formData.college}
               onChange={handleChange}
               required
+              disabled={collegesLoading}
             >
-              <option value="" disabled hidden>Select your college</option>
-              {Array.isArray(colleges) && colleges.map(college => (
-                <option
-                  key={college._id}
-                  value={college.collegeName}
-                >
-                  {college.collegeName}
-                </option>
-              ))}
+              {collegesLoading ? (
+                <option value="">Loading colleges...</option>
+              ) : (
+                <>
+                  <option value="" disabled hidden>Select your college</option>
+                  {Array.isArray(colleges) && colleges.map(college => (
+                    <option key={college._id} value={college.collegeName}>
+                      {college.collegeName}
+                    </option>
+                  ))}
+                </>
+              )}
             </select>
           </div>
+
 
           <button
             className="signup-button"
