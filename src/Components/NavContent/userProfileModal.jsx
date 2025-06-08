@@ -9,16 +9,16 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
 
   const [userData, setUserData] = useState(initialUserData || null);
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [colleges, setColleges] = useState([]);
+  const [collegesLoading, setCollegesLoading] = useState(false);
   const [editData, setEditData] = useState({
     name: "",
     email: "",
     contact: "",
     college: "",
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [colleges, setColleges] = useState([]);
-  const [collegesLoading, setCollegesLoading] = useState(false);
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
 
@@ -30,8 +30,6 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
     try {
       setLoading(true);
 
-
-
       if (!userId || !token) {
         throw new Error("User ID or token not found in local storage.");
       }
@@ -40,7 +38,7 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
         method: "GET",
         credentials: "include",
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
         },
       });
 
