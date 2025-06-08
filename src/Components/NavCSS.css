@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Bokor&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bokor&family=Permanent+Marker&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Bokor&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Bokor&family=Permanent+Marker&display=swap'); */
 /* @import url('https://st3.depositphotos.com/4431055/12920/i/450/depositphotos_129206658-stock-photo-wooden-texture-with-various-dishes.jpg'); */
 
 
@@ -96,7 +96,101 @@
 }
 
 
+/* Profile container */
+.profile-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto; /* Pushes to the right */
+}
+
+/* Profile button */
+.profile-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #f0f2f5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.profile-icon-btn:hover {
+  background: #e0e0e0;
+  transform: scale(1.05);
+}
+
+/* Profile image */
+.profile-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Initials fallback */
+.profile-initials {
+  font-weight: 600;
+  color: #fc8019; /* Your theme color */
+  font-size: 18px;
+}
+
+/* User icon fallback */
+.profile-initials svg {
+  font-size: 24px;
+  color: #666;
+}
+
+/* Logout button */
+.logout-btn {
+  background: transparent;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.logout-btn:hover {
+  background: #ffecec;
+  color: #ff4d4d;
+}
+
+.logout-btn svg {
+  font-size: 18px;
+}
+
+/* Login button */
 #login {
+  background: #fc8019; /* Your theme color */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-left: auto; /* Aligns to the right */
+}
+
+#login:hover {
+  background: #e67300; /* Darker shade */
+  transform: translateY(-1px);
+}
+
+/* Loading state */
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* #login {
   padding: 4px 10px;
   border: 2px solid rgb(51, 50, 50);
   border-radius: 5px;
@@ -104,7 +198,7 @@
   transition: all 0.3s ease;
   background-color: transparent;
   cursor: pointer;
-}
+} */
 
 /* #login>a {
   color: black;
@@ -112,12 +206,12 @@
   font-weight: bold;
 } */
 
-#login:hover {
+/* #login:hover {
   background-color: black;
   box-shadow: 0px 10px 10px 0px rgba(5, 129, 231, 0.7);
   transform: translateY(-3px);
   color: white;
-}
+} */
 
 
 

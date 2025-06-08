@@ -11,7 +11,7 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
   const [colleges, setColleges] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  // const [collegesLoading, setCollegesLoading] = useState(false);
+  const [collegesLoading, setCollegesLoading] = useState(false);
 
   useEffect(() => {
     const fetchAllColleges = async () => {
@@ -41,7 +41,7 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
     if (e.target.classList.contains("signup-modal-overlay")) onClose();
   };
 
-  const handleChange =  (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name === "contact") {
@@ -71,11 +71,12 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
     setLoading(true)
     try {
 
-      const response = await  fetch("/api/v1/users/signup", {
+      const response = await fetch("/api/v1/users/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials:"include",
         body: JSON.stringify({ name, college, contact, email, password }),
       });
 
@@ -84,12 +85,14 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
 
       const data = await response.json();
 
+      console.log("data : ",data);
+
       // if (Array.isArray(data)) {
-        
+
       //   setColleges(data);
 
       // } else if (data.colleges && Array.isArray(data.colleges)) {
-        
+
       //   setColleges(data.colleges);
       // } else {
       //   throw new Error("Invalid colleges data format");
@@ -117,55 +120,57 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
         <h2>Create an Account</h2>
 
         {error && <div className="error-message">{error}</div>}
+        <form>
+          {["name", "contact", "email", "password", "confirmPassword"].map((field) => (
+            <div key={field} className="signup-floating-label">
+              <input
+                type={
+                  field.includes("password") ? "password" :
+                    field === "contact" ? "tel" :
+                      field === "email" ? "email" : "text"
+                }
+                name={field}
+                value={formData[field]}
+                onChange={handleChange}
+                required
+                maxLength={field === "contact" ? 10 : undefined}
+              />
+              <label>
+                {field === "confirmPassword" ? "Confirm Password" :
+                  field.charAt(0).toUpperCase() + field.slice(1)}
+              </label>
+            </div>
+          ))}
 
-        {["name", "contact", "email", "password", "confirmPassword"].map((field) => (
-          <div key={field} className="signup-floating-label">
-            <input
-              type={
-                field.includes("password") ? "password" :
-                  field === "contact" ? "tel" :
-                    field === "email" ? "email" : "text"
-              }
-              name={field}
-              value={formData[field]}
+          <div className="signup-floating-label">
+            <select
+              name="college"
+              value={formData.college}
               onChange={handleChange}
               required
-              maxLength={field === "contact" ? 10 : undefined}
-            />
-            <label>
-              {field === "confirmPassword" ? "Confirm Password" :
-                field.charAt(0).toUpperCase() + field.slice(1)}
-            </label>
+            >
+              <option value="" disabled hidden>Select your college</option>
+              {Array.isArray(colleges) && colleges.map(college => (
+                <option
+                  key={college._id}
+                  value={college.collegeName}
+                >
+                  {college.collegeName}
+                </option>
+              ))}
+            </select>
           </div>
-        ))}
 
-        <div className="signup-floating-label">
-          <select
-            name="college"
-            value={formData.college}
-            onChange={handleChange}
-            required
+          <button
+            className="signup-button"
+            onClick={handleSignup}
+            disabled={loading}
           >
-            <option value="" disabled hidden>Select your college</option>
-            {Array.isArray(colleges) && colleges.map(college => (
-              <option
-                key={college._id}
-                value={college.collegeName}
-              >
-                {college.collegeName}
-              </option>
-            ))}
-          </select>
-        </div>
+            {loading ? "Signing up..." : "Sign Up"}
 
-        <button
-          className="signup-button"
-          onClick={handleSignup}
-          disabled={loading}
-        >
-          {loading ? "Signing up..." : "Sign Up"}
+          </button>
 
-        </button>
+        </form>
 
         <p className="signup-footer-text">
           Already have an account?{" "}

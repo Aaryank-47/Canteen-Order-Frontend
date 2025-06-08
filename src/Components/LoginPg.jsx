@@ -1,5 +1,5 @@
 // LoginPg.jsx
-import {  GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 // import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -36,20 +36,32 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
         credentials: "include", //cookie
         body: JSON.stringify(payload),
       });
+      console.log("Login Response : ",response);
 
       const data = await response.json();
+      console.log("data : ",data)
 
       if (!response.ok) {
         throw new Error(data.message || 'Login FAILED');
       }
 
-      // Store user data and token
+      // if (!data.user) {
+      //   throw new Error('User data is missing in the response.');
+      // }
+
+      const { name, email, contact, _id } = data.user;
+
+      localStorage.setItem("userData", JSON.stringify({ name, email, contact, _id }));
+      localStorage.setItem('userId',data.userId);
       localStorage.setItem("token", data.token);
-      localStorage.setItem("userData", JSON.stringify({
-        name: data.user?.name,
-        email: data.user?.email,
-        contact: data.user?.contact
-      }));
+      // localStorage.setItem("userData", JSON.stringify({
+      //   name: data.user?.name,
+      //   email: data.user?.email,
+      //   contact: data.user?.contact,
+      //   userId: data.user?._id
+      // }));
+
+
       onLoginSuccess({
         name: data.user?.name,
         email: data.user?.email,
@@ -101,36 +113,37 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
         <h2>Sign In</h2>
 
         {error && <div className="error-message">{error}</div>}
+        <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+          <div className="login-floating-label">
+            <input
+              type="text"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              required
+              autoComplete="off"
+            />
+            <label>Phone No. | Email-id</label>
+          </div>
 
-        <div className="login-floating-label">
-          <input
-            type="text"
-            value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
-            required
-            autoComplete="off"
-          />
-          <label>Phone No. | Email-id</label>
-        </div>
+          <div className="login-floating-label">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="off"
+            />
+            <label>Password</label>
+          </div>
 
-        <div className="login-floating-label">
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="off"
-          />
-          <label>Password</label>
-        </div>
-
-        <button
-          className="login-button"
-          onClick={handleLogin}
-          disabled={loading}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
+          <button
+            className="login-button"
+            onClick={handleLogin}
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
 
         <div className="login-divider-container">
           <hr className="login-divider" />
@@ -140,7 +153,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
 
         <strong className="login-type">Login with Google</strong>
         {/* <GoogleOAuthProvider clientId="113373390210-s6dqhs50dfqateg8vidagfv3nqs8j974.apps.googleusercontent.com"> */}
-          <GoogleLogin
+        <GoogleLogin
           onSuccess={async (res) => {
             console.log("Google Login Success:", res);
             const idtoken = res.credential;
@@ -152,7 +165,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
                   "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify({ idToken : idtoken })
+                body: JSON.stringify({ idToken: idtoken })
               });
 
               const data = await response.json();
@@ -163,7 +176,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
           }}
           onError={() => console.log("Login Failed")}
         />
-          {/* <GoogleLogin
+        {/* <GoogleLogin
             onSuccess={handleGoogleLogin}
             onError={() => console.log("Google Login Failed")}
           /> */}

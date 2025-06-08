@@ -1,6 +1,251 @@
+// import "./NavCSS.css";
+// import { useState, useEffect } from "react";
+// import {
+//   NavLink,
+//   Route,
+//   Routes,
+//   useNavigate,
+//   useSearchParams 
+// } from "react-router-dom";
+// import { FaBars, FaTimes, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+
+// import About from "./NavContent/About.jsx";
+// import Menu from "./NavContent/Menu.jsx";
+// import Info from "./NavContent/info.jsx";
+// import Orderhistory from "./NavContent/OrderHistory.jsx";
+// import Home from "./Home.jsx";
+// import LoginPg from "./LoginPg.jsx";
+// import SignupPg from "./SignupPg.jsx";
+// import College from "./NavContent/College.jsx";
+// import UserProfileModal from "./NavContent/userProfileModal.jsx";
+// import "./R_App.css";
+
+// function AppRoutes({
+//   isLoggedIn,
+//   userData,
+//   handleOpenLogin,
+//   handleOpenSignup,
+//   handleLoginSuccess,
+//   isLoginOpen,
+//   isSignupOpen,
+//   handleClose,
+//   setUserData,
+// }) {
+//   return (
+//     <Routes>
+//       <Route path="/" element={<Home />} />
+//       <Route path="/about" element={<About />} />
+//       <Route path="/menu" element={<Menu />} />
+//       <Route path="/orderhistory" element={<Orderhistory />} />
+//       <Route path="/info" element={<Info />} />
+//       <Route path="/college" element={<College />} />
+//       <Route
+//         path="/profile/:userId"
+//         element={
+//           <UserProfileModal
+//             isOpen={true}
+//             onClosePath="/"
+//             userData={userData}
+//             onUpdateUser={(updatedUser) => {
+//               localStorage.setItem("userData", JSON.stringify(updatedUser));
+//               setUserData(updatedUser);
+//             }}
+//           />
+//         }
+//       />
+//     </Routes>
+//   );
+// }
+
+// const  NavPg = ()=> {
+//   const [isLoginOpen, setLoginOpen] = useState(false);
+//   const [isSignupOpen, setSignupOpen] = useState(false);
+//   const [isMobileView, setMobileView] = useState(false);
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
+//   const [userData, setUserData] = useState(null);
+//   const [loading, setLoading] = useState(false);
+//   const [searchParams, setSearchParams] = useSearchParams();
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const checkAuthStatus = async () => {
+//       const token = localStorage.getItem("token");
+//       if (token) {
+//         try {
+//           const response = await fetch("/users/verify-token", {
+//             headers: {
+//               Authorization: `Bearer ${token}`,
+//               "Content-Type": "application/json",
+//             },
+//           });
+//           if (response.ok) {
+//             const user = JSON.parse(localStorage.getItem("userData"));
+//             setIsLoggedIn(true);
+//             setUserData(user);
+//           }
+//         } catch (error) {
+//           console.error("Auth verification failed:", error);
+//           handleLogout();
+//         }
+//       }
+//     };
+//     checkAuthStatus();
+//   }, []);
+
+//   const handleLoginSuccess = async (user) => {
+//     setIsLoggedIn(true);
+//     setUserData(user);
+//     setLoginOpen(false);
+//   };
+
+//   const handleLogout = async () => {
+//     setLoading(true);
+//     try {
+//       const token = localStorage.getItem("token");
+//       await fetch("api/v1/users/logout", {
+//         method: "POST",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//       });
+//     } catch (error) {
+//       console.error("Logout error:", error);
+//     } finally {
+//       localStorage.removeItem("token");
+//       localStorage.removeItem("userId");
+//       localStorage.removeItem("userData");
+//       setIsLoggedIn(false);
+//       setUserData(null);
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleOpenLogin = () => {
+//     setLoginOpen(true);
+//     setSignupOpen(false);
+//   };
+//   const handleOpenSignup = () => {
+//     setSignupOpen(true);
+//     setLoginOpen(false);
+//   };
+//   const handleClose = () => {
+//     setLoginOpen(false);
+//     setSignupOpen(false);
+//   };
+
+//   return (
+//     <>
+//       <nav className="nav">
+//         <h1 className="logo">RESTRO</h1>
+//         <div className="hamburger" onClick={() => setMobileView(!isMobileView)}>
+//           {isMobileView ? <FaTimes /> : <FaBars />}
+//         </div>
+//         <ul className={`nav-list ${isMobileView ? "active" : ""}`}>
+//           <li className="nav-item">
+//             <NavLink to="/" onClick={() => setMobileView(false)}>
+//               Home
+//             </NavLink>
+//           </li>
+//           <li className="nav-item">
+//             <NavLink to="/about" onClick={() => setMobileView(false)}>
+//               About Us
+//             </NavLink>
+//           </li>
+//           <li className="nav-item">
+//             <NavLink to="/menu" onClick={() => setMobileView(false)}>
+//               Menu
+//             </NavLink>
+//           </li>
+//           <li className="nav-item">
+//             <NavLink to="/orderhistory" onClick={() => setMobileView(false)}>
+//               Order History
+//             </NavLink>
+//           </li>
+//           <li className="nav-item">
+//             <NavLink to="/info" onClick={() => setMobileView(false)}>
+//               Info
+//             </NavLink>
+//           </li>
+//           <li className="nav-item">
+//             <NavLink to="/college" onClick={() => setMobileView(false)}>
+//               College
+//             </NavLink>
+//           </li>
+
+//           {isLoggedIn ? (
+//             <div className="profile-container">
+//               <button
+//                 className="profile-icon-btn"
+//                 onClick={() => navigate(`/profile/${userData?._id}`)}
+//                 disabled={loading}
+//               >
+//                 {userData?.avatar ? (
+//                   <img
+//                     src={userData.avatar}
+//                     alt="Profile"
+//                     className="profile-avatar-img"
+//                   />
+//                 ) : (
+//                   <div className="profile-initials">
+//                     {userData?.name
+//                       ? userData.name.charAt(0).toUpperCase()
+//                       : "U"}
+//                   </div>
+//                 )}
+//               </button>
+//               <button className="logout-btn" onClick={handleLogout} disabled={loading}>
+//                 <FaSignOutAlt />
+//                 {loading ? "..." : ""}
+//               </button>
+//             </div>
+//           ) : (
+//             <button className="nav-item" id="login" onClick={handleOpenLogin}>
+//               LOGIN
+//             </button>
+//           )}
+//         </ul>
+//       </nav>
+
+//       <AppRoutes
+//         isLoggedIn={isLoggedIn}
+//         userData={userData}
+//         handleOpenLogin={handleOpenLogin}
+//         handleOpenSignup={handleOpenSignup}
+//         handleLoginSuccess={handleLoginSuccess}
+//         isLoginOpen={isLoginOpen}
+//         isSignupOpen={isSignupOpen}
+//         handleClose={handleClose}
+//         setUserData={setUserData}
+//       />
+
+//       {isLoginOpen && (
+//         <LoginPg
+//           isOpen={isLoginOpen}
+//           onClose={handleClose}
+//           onSignupClick={handleOpenSignup}
+//           onLoginSuccess={handleLoginSuccess}
+//         />
+//       )}
+
+//       {isSignupOpen && (
+//         <SignupPg
+//           isOpen={isSignupOpen}
+//           onClose={handleClose}
+//           onLoginClick={handleOpenLogin}
+//         />
+//       )}
+//     </>
+//   );
+// }
+
+// export default NavPg;
+
+// -------------------------------------
+
 import "./NavCSS.css";
 import { useState, useEffect} from "react";
-import { BrowserRouter as Router, NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, Route, Routes } from "react-router-dom";
 import { FaBars, FaTimes, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import About from "./NavContent/About.jsx";
 import Menu from "./NavContent/Menu.jsx";
@@ -68,6 +313,7 @@ export default function NavPg() {
       console.error('Logout error:', error);
     } finally {
       localStorage.removeItem('token');
+      localStorage.removeItem('userId');
       localStorage.removeItem('userData');
       setIsLoggedIn(false);
       setUserData(null);
@@ -89,7 +335,7 @@ export default function NavPg() {
     setSignupOpen(false);
   };
   return (
-    <Router>
+    <>
       <nav className="nav">
         <h1 className="logo">RESTRO</h1>
         <div className="hamburger" onClick={() => setMobileView(!isMobileView)}>
@@ -166,7 +412,7 @@ export default function NavPg() {
                   />
                 ) : (
                   <div className="profile-initials">
-                    {userData?.name ? userData.name.charAt(0).toUpperCase() : 'U'}
+                    {userData?.name ? userData.name.charAt(0).toUpperCase() : <FaUserCircle/>}
                   </div>
                 )}
               </button>
@@ -194,6 +440,7 @@ export default function NavPg() {
         <Route path="/orderhistory" element={<Orderhistory />} />
         <Route path="/info" element={<Info />} />
         <Route path="/college" element={<College />} />
+        <Route path="/profile/:userId" element={<UserProfileModal />} />
       </Routes>
 
       {isLoginOpen && (
@@ -223,6 +470,6 @@ export default function NavPg() {
           }}
         />
       )}
-    </Router>
+    </>
   );
 }
