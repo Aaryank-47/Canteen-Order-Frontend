@@ -59,12 +59,6 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
 
     const { name, college, contact, email, password, confirmPassword } = formData;
 
-    // if (!name || !college || !contact || !email || !password || !confirmPassword)
-    //   return alert("Please fill all fields");
-
-    // if (!/^\d{10}$/.test(contact))
-    //   return alert("Contact number must be exactly 10 digits");
-
     if (password !== confirmPassword)
       return alert("Passwords do not match");
 

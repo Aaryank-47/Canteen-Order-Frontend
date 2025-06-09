@@ -88,18 +88,58 @@ export default function Menu() {
     setCheckoutStep('payment');
   };
 
-  const handlePlaceOrder = () => {
-    const order = {
+  const handlePlaceOrder = async () => {
+    const userId = localStorage.getItem('userId')
+    try {
+      const response = await fetch('api/v1/orders/place-order', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          userId: userId,
+          foodItems: cart.map(item => ({
+            foodId: item._id,
+            foodQuantity: item.quantity
+          }))
+        })
+      })
+
+      console.log("Order Placing reponse : ", response);
+
+      const data = await response.json();
+      if (!data) {
+        throw new Error("Unable to fetch data")
+      }
+      console.log("data : ", data);
+      if (!response.ok) {
+        throw new Error(data.message || "Unable to place Order");
+      }
+    } catch (error) {
+      console.error("Error in Placing order", error);
+    }
+
+    // const order = {
+    //   id: Date.now(),
+    //   items: [...cart],
+    //   total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+    //   user: { ...user },
+    //   paymentMethod,
+    //   date: new Date().toISOString(),
+    //   status: 'Preparing'
+    // };
+
+    setOrderHistory([{
       id: Date.now(),
       items: [...cart],
-      total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+      total: totalAmount,
       user: { ...user },
       paymentMethod,
       date: new Date().toISOString(),
       status: 'Preparing'
-    };
-
-    setOrderHistory([order, ...orderHistory]);
+    }, ...orderHistory]);
+    
     setCart([]);
     setCheckoutStep('confirmation');
   };
