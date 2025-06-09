@@ -43,18 +43,25 @@ export default function Menu() {
   };
 
   const addToCart = (item) => {
-    const existingItem = cart.find(cartItem => cartItem.id === item.id);
+    const normalizedItem = {
+      ...item,
+      name: item.foodName,
+      price: item.foodPrice
+    };
+
+    const existingItem = cart.find(cartItem => cartItem._id === item._id);
     if (existingItem) {
       setCart(cart.map(cartItem =>
-        cartItem.id === item.id
+        cartItem._id === item._id
           ? { ...cartItem, quantity: cartItem.quantity + 1 }
           : cartItem
       ));
     } else {
-      setCart([...cart, { ...item, quantity: 1, cartId: Date.now() }]);
+      setCart([...cart, { ...normalizedItem, quantity: 1, cartId: Date.now() }]);
     }
     setIsCartOpen(true);
   };
+
 
   const removeFromCart = (cartId) => {
     setCart(cart.filter(item => item.cartId !== cartId));
@@ -186,7 +193,7 @@ export default function Menu() {
               {cart.map(item => (
                 <li key={item.cartId}>
                   <div className="cart-item-info">
-                    <span>{item.name} (₹{item.price})</span>
+                    <span>{item.foodName} (₹{item.foodPrice})</span>
                     <div className="quantity-controls">
                       <button onClick={() => adjustQuantity(item.cartId, -1)}>-</button>
                       <span>{item.quantity}</span>
