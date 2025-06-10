@@ -19,9 +19,10 @@ export default function OrderHistory() {
         });
 
         const data = await response.json();
+        console.log("Fetched data: ", data);
 
         if (response.status === 404) {
-          setOrders([]); // No orders found — not a crash
+          setOrders([]);
           return;
         }
 
@@ -29,7 +30,7 @@ export default function OrderHistory() {
           throw new Error(data.message || "Error fetching order history");
         }
 
-        setOrders(data.orders || []); // Assuming API returns `orders` array
+        setOrders(Array.isArray(data.orders) ? data.orders : []);
       } catch (err) {
         console.error("Error in order history:", err);
         setError(err.message || "Something went wrong");
@@ -53,26 +54,34 @@ export default function OrderHistory() {
           <p>No past orders found.</p>
         ) : (
           orders.map(order => (
-            <div key={order._id || order.id} className="order-card">
+            <div key={order._id} className="order-card">
               <div className="order-header">
                 <span className="order-id">Order #{order.orderNumber || order._id}</span>
-                <span className="order-date">{new Date(order.date || order.createdAt).toLocaleDateString()}</span>
+                <span className="order-date">{new Date(order.createdAt).toLocaleDateString()}</span>
                 <span className={`order-status ${order.status.toLowerCase()}`}>
                   {order.status}
                 </span>
               </div>
 
               <div className="order-items">
-                {order.items.map((item, index) => (
+                {order.foodItems?.map((item, index) => (
                   <div key={index} className="order-item">
-                    <span>{item.quantity}x {item.name}</span>
-                    <span>₹{item.price * item.quantity}</span>
+                    <div className="food-info">
+                      <span className="food-name">{item.foodId?.foodName || "Unknown Item"}</span>
+                      <span className="food-price">₹{item.foodId?.foodPrice || 0} each</span>
+                    </div>
+                    <div className="item-total">
+                      <span>{item.foodQuantity}x</span>
+                      <span>₹{(item.foodId?.foodPrice || 0) * item.foodQuantity}</span>
+                    </div>
                   </div>
                 ))}
               </div>
 
+
+
               <div className="order-footer">
-                <span className="order-total">Total: ₹{order.total}</span>
+                <span className="order-total">Total: ₹{order.totalPrice}</span>
                 <button className="reorder-btn">Reorder</button>
               </div>
             </div>
@@ -82,6 +91,7 @@ export default function OrderHistory() {
     </div>
   );
 }
+
 
 
 

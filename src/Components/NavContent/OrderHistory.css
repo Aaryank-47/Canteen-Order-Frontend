@@ -105,3 +105,61 @@
   background-color: #fc8019;
   color: white;
 }
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.food-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-total {
+  display: flex;
+  gap: 10px;
+}
+
+.food-name {
+  font-weight: bold;
+}
+
+.food-price {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.order-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.order-status.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.order-status.preparing {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.order-status.ready {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.order-status.delivered {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.order-status.cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
