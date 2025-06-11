@@ -17,7 +17,7 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
     const fetchAllColleges = async () => {
       setCollegesLoading(true);
       try {
-        const response = await fetch("/api/v1/college/all-colleges");
+        const response = await fetch("http://localhost:5000/api/v1/college/all-colleges");
         const data = await response.json();
 
         if (!response.ok) throw new Error(data.message || "Failed to fetch colleges");
@@ -56,7 +56,6 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
 
   const handleSignup = async () => {
 
-
     const { name, college, contact, email, password, confirmPassword } = formData;
 
     if (password !== confirmPassword)
@@ -65,7 +64,7 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
     setLoading(true)
     try {
 
-      const response = await fetch("/api/v1/users/signup", {
+      const response = await fetch("http://localhost:5000/api/v1/users/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,17 +79,6 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
       const data = await response.json();
 
       console.log("data : ", data);
-
-      // if (Array.isArray(data)) {
-
-      //   setColleges(data);
-
-      // } else if (data.colleges && Array.isArray(data.colleges)) {
-
-      //   setColleges(data.colleges);
-      // } else {
-      //   throw new Error("Invalid colleges data format");
-      // }
 
       if (!response.ok) {
         throw new Error(data.message || "Signup failed");

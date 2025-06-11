@@ -28,7 +28,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
       const isEmail = identifier.includes('@');
       const payload = isEmail ? { email: identifier, password } : { contact: identifier, password }
 
-      const response = await fetch('/api/v1/users/login', {
+      const response = await fetch('http://localhost:5000/api/v1/users/login', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
@@ -36,30 +36,22 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
         credentials: "include", //cookie
         body: JSON.stringify(payload),
       });
-      console.log("Login Response : ",response);
+      console.log("Login Response : ", response);
+      console.log("Response headers:", response.headers); // Add this
+      console.log("Response status:", response.status);
 
       const data = await response.json();
-      console.log("data : ",data)
+      console.log("data : ", data)
 
       if (!response.ok) {
         throw new Error(data.message || 'Login FAILED');
       }
 
-      // if (!data.user) {
-      //   throw new Error('User data is missing in the response.');
-      // }
-
       const { name, email, contact, _id } = data.user;
 
       localStorage.setItem("userData", JSON.stringify({ name, email, contact, _id }));
-      localStorage.setItem('userId',data.userId);
+      localStorage.setItem('userId', data.userId);
       localStorage.setItem("token", data.token);
-      // localStorage.setItem("userData", JSON.stringify({
-      //   name: data.user?.name,
-      //   email: data.user?.email,
-      //   contact: data.user?.contact,
-      //   userId: data.user?._id
-      // }));
 
 
       onLoginSuccess({
