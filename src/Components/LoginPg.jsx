@@ -37,7 +37,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
         body: JSON.stringify(payload),
       });
       console.log("Login Response : ", response);
-      console.log("Response headers:", response.headers); // Add this
+      console.log("Response headers:", response.headers);
       console.log("Response status:", response.status);
 
       const data = await response.json();
