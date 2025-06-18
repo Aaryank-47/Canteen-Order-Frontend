@@ -17,6 +17,7 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
     const fetchAllColleges = async () => {
       setCollegesLoading(true);
       try {
+        
         const response = await fetch("http://localhost:5000/api/v1/college/all-colleges");
         const data = await response.json();
 
@@ -27,10 +28,14 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
         setColleges(collegeList);
 
       } catch (error) {
+        
         console.error("Error fetching colleges:", error);
         setError("Failed to load colleges. Please try again later.");
+
       } finally {
+        
         setCollegesLoading(false);
+
       }
     };
 
