@@ -17,9 +17,14 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
     const fetchAllColleges = async () => {
       setCollegesLoading(true);
       try {
-        
-        const response = await fetch("http://localhost:5000/api/v1/college/all-colleges");
+
+        const response = await fetch("http://localhost:5000/api/v1/colleges/all-colleges");
         const data = await response.json();
+        if (!data) {
+          console.error("No data received from colleges API", data.message);
+        }
+        console.log("Colleges Data:", data);
+
 
         if (!response.ok) throw new Error(data.message || "Failed to fetch colleges");
 
@@ -28,12 +33,12 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
         setColleges(collegeList);
 
       } catch (error) {
-        
-        console.error("Error fetching colleges:", error);
+
+        console.error("Error fetching colleges:", error.message);
         setError("Failed to load colleges. Please try again later.");
 
       } finally {
-        
+
         setCollegesLoading(false);
 
       }
@@ -121,6 +126,14 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
                 onChange={handleChange}
                 required
                 maxLength={field === "contact" ? 10 : undefined}
+                autoComplete={
+                  field === "email" ? "email" :
+                    field === "password" ? "new-password" :
+                      field === "confirmPassword" ? "new-password" :
+                        field === "name" ? "name" :
+                          field === "contact" ? "tel" :
+                            "on"
+                }
               />
               <label>
                 {field === "confirmPassword" ? "Confirm Password" :
