@@ -286,13 +286,13 @@ export default function NavPg() {
               'Content-Type': 'application/json'
             }
           });
+          const data = await response.json();
 
           if (!response.ok) {
-            throw new Error('Token verification failed');
+            throw new Error('Token verification failed',data.message);
           }
           console.log('Auth response:', response);
 
-          const data = await response.json();
           if (!data) {
             console.log('No user data found in response', data.message);
           }
@@ -325,13 +325,10 @@ export default function NavPg() {
   const handleLogout = async () => {
     setLoading(true);
     try {
-      const userToken = localStorage.getItem('userToken');
+      // const userToken = localStorage.getItem('userToken');
       await fetch('api/v1/users/logout', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${userToken}`,
-          'Content-Type': 'application/json'
-        }
+        credentials: 'include',
       });
     } catch (error) {
       console.error('Logout error:', error);
