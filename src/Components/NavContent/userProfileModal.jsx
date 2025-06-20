@@ -20,7 +20,7 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
     college: "",
   });
   const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("userToken");
 
   console.log("Current userId:", userId);
   console.log("Current token:", token);
@@ -123,7 +123,7 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
     const fetchAllColleges = async () => {
       setCollegesLoading(true);
       try {
-        const response = await fetch("/api/v1/college/all-colleges");
+        const response = await fetch("/api/v1/colleges/all-colleges");
         const data = await response.json();
 
         if (!response.ok) throw new Error(data.message || "Failed to fetch colleges");

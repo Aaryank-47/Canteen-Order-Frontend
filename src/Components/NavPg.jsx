@@ -244,7 +244,7 @@
 // -------------------------------------
 
 import "./NavCSS.css";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
 import { FaBars, FaTimes, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import About from "./NavContent/About.jsx";
@@ -269,21 +269,45 @@ export default function NavPg() {
 
   useEffect(() => {
     const checkAuthStatus = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
+
+      const userToken = localStorage.getItem('userToken');
+      const userId = localStorage.getItem('userId');
+
+      console.log('Checking auth status, userToken:', userToken);
+      console.log('Checking auth status, userId:', userId);
+
+      if (userToken) {
         try {
-          const response = await fetch('/users/verify-token', {
+          const response = await fetch('http://localhost:5000/api/v1/users/verify-token', {
+            method: 'GET',
+            credentials: 'include',
             headers: {
-              'Authorization': `Bearer ${token}`,
+              'Authorization': `Bearer ${userToken}`,
               'Content-Type': 'application/json'
             }
           });
+
+          if (!response.ok) {
+            throw new Error('Token verification failed');
+          }
+          console.log('Auth response:', response);
+
+          const data = await response.json();
+          if (!data) {
+            console.log('No user data found in response', data.message);
+          }
+
+          console.log('Token verification successful, user data:', data);
+          // localStorage.setItem('userData', JSON.stringify(data));
+
           if (response.ok) {
             const user = JSON.parse(localStorage.getItem('userData'));
             setIsLoggedIn(true);
             setUserData(user);
           }
+
         } catch (error) {
+
           console.error('Auth verification failed:', error);
           handleLogout();
         }
@@ -301,18 +325,18 @@ export default function NavPg() {
   const handleLogout = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
+      const userToken = localStorage.getItem('userToken');
       await fetch('api/v1/users/logout', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${userToken}`,
           'Content-Type': 'application/json'
         }
       });
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      localStorage.removeItem('token');
+      localStorage.removeItem('userToken');
       localStorage.removeItem('userId');
       localStorage.removeItem('userData');
       setIsLoggedIn(false);
@@ -412,7 +436,7 @@ export default function NavPg() {
                   />
                 ) : (
                   <div className="profile-initials">
-                    {userData?.name ? userData.name.charAt(0).toUpperCase() : <FaUserCircle/>}
+                    {userData?.name ? userData.name.charAt(0).toUpperCase() : <FaUserCircle />}
                   </div>
                 )}
               </button>

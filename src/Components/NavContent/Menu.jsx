@@ -32,15 +32,40 @@ export default function Menu() {
     }
   };
 
+
+  // const user = {
+  //   name: "John Doe",
+  //   phone: "9876543210",
+  //   address: "123 College Hostel, University Campus",
+  // };
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch('api/v1/users/get-user', {
+        method: 'GET',
+        credentials: 'include'
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+      const data = await response.json();
+      if (!data) {
+        console.log("Error in fetching the userData : ", data.message);
+      }
+
+      console.log("User data fetched successfully:", data.user);
+
+    } catch (error) {
+      console.error("Error fetching user data:", error.message);
+
+    }
+  }
+
+
   useEffect(() => {
     loadAllFoodItems();
+    fetchUser();
   }, []);
-
-  const user = {
-    name: "John Doe",
-    phone: "9876543210",
-    address: "123 College Hostel, University Campus",
-  };
 
   const addToCart = (item) => {
     const normalizedItem = {
@@ -139,7 +164,7 @@ export default function Menu() {
       date: new Date().toISOString(),
       status: 'Preparing'
     }, ...orderHistory]);
-    
+
     setCart([]);
     setCheckoutStep('confirmation');
   };

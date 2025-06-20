@@ -41,7 +41,10 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
       console.log("Response status:", response.status);
 
       const data = await response.json();
-      console.log("data : ", data)
+      if(!data){
+        console.error("No data received from the server.", data.message);
+      }
+      console.log("Login response data : ", data)
 
       if (!response.ok) {
         throw new Error(data.message || 'Login FAILED');
@@ -51,7 +54,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
 
       localStorage.setItem("userData", JSON.stringify({ name, email, contact, _id }));
       localStorage.setItem('userId', data.userId);
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("userToken", data.userToken);
 
 
       onLoginSuccess({
