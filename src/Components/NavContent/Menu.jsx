@@ -7,7 +7,14 @@ export default function Menu() {
   const [checkoutStep, setCheckoutStep] = useState('cart');
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [orderHistory, setOrderHistory] = useState([]);
+  const [currentOrders, setCurrentOrders] = useState([]);
   const [allfoodItems, setAllFoodItems] = useState([]);
+  const [user, setUser] = useState(null);
+  const [isCurrentOrdersOpen, setIsCurrentOrdersOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState('');
 
   const loadAllFoodItems = async () => {
     try {
@@ -33,12 +40,6 @@ export default function Menu() {
   };
 
 
-  // const user = {
-  //   name: "John Doe",
-  //   phone: "9876543210",
-  //   address: "123 College Hostel, University Campus",
-  // };
-
   const fetchUser = async () => {
     try {
       const response = await fetch('api/v1/users/get-user', {
@@ -55,17 +56,96 @@ export default function Menu() {
 
       console.log("User data fetched successfully:", data.user);
 
+      setUser(data.user);
+
     } catch (error) {
       console.error("Error fetching user data:", error.message);
 
     }
   }
 
-
   useEffect(() => {
     loadAllFoodItems();
     fetchUser();
   }, []);
+
+  const fetchSingleFoodItem = async (foodId) => {
+
+    console.log("Fetching food item with ID:", foodId);
+    try {
+      setIsSearching(true);
+      const response = await fetch(`/api/v1/foods/${foodId}`, {
+        method: 'GET',
+        // credentials: 'include'
+      });
+
+      const data = await response.json();
+      console.log("Single food item data: ", data);
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch food item");
+      }
+
+      if (!data) {
+        console.log("data couldn't be fetched");
+      }
+
+      console.log("Fetched food item: ", data.food);
+      return data.Food;
+
+    } catch (error) {
+      console.error("Error fetching food item:", error);
+
+    } finally {
+      setIsSearching(false);
+    }
+  }
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setSearchError('');
+
+    if (!searchTerm.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    // Check if search term looks like an ID (24 character hex string)
+    const isIdSearch = /^[0-9a-fA-F]{24}$/.test(searchTerm.trim());
+
+    try {
+
+      if (isIdSearch) {
+        const foodItem = await fetchSingleFoodItem(searchTerm.trim());
+
+        if (foodItem) {
+          setSearchResults([foodItem]);
+        } else {
+          setSearchResults([]);
+          setSearchError(`No food item found with ID: ${searchTerm}`);
+        }
+      } else {
+        const results = allfoodItems.filter(item =>
+          item.foodName.toLowerCase().includes(searchTerm.toLowerCase())
+          // item.foodCategory.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        setSearchResults(results);
+
+        if (results.length === 0) {
+          setSearchError(`No food items found for "${searchTerm}"`);
+        }
+
+      }
+    } catch (error) {
+      console.error("Search error:", error);
+      setSearchError("Error searching for food items");
+    }
+
+
+
+
+  }
 
   const addToCart = (item) => {
     const normalizedItem = {
@@ -92,6 +172,7 @@ export default function Menu() {
     setCart(cart.filter(item => item.cartId !== cartId));
   };
 
+
   const adjustQuantity = (cartId, amount) => {
     setCart(cart.map(item => {
       if (item.cartId === cartId) {
@@ -114,20 +195,26 @@ export default function Menu() {
   };
 
   const handlePlaceOrder = async () => {
+
     const userId = localStorage.getItem('userId')
+
     try {
+
       const response = await fetch('api/v1/orders/place-order', {
         method: 'POST',
+        credentials: 'include',
+
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: 'include',
+
         body: JSON.stringify({
           userId: userId,
           foodItems: cart.map(item => ({
             foodId: item._id,
             foodQuantity: item.quantity
           }))
+
         })
       })
 
@@ -138,37 +225,31 @@ export default function Menu() {
         throw new Error("Unable to fetch data")
       }
       console.log("data : ", data);
+
+      const newOrder = {
+        id: Date.now(),
+        items: [...cart],
+        total: totalAmount,
+        user: user ? { ...user } : null,
+        paymentMethod,
+        date: new Date().toISOString(),
+        status: 'Preparing'
+      };
+
+      setCurrentOrders([newOrder, ...currentOrders]);
+      setOrderHistory([newOrder, ...orderHistory]);
+      setCart([]);
+      setCheckoutStep('confirmation');
+
       if (!response.ok) {
         throw new Error(data.message || "Unable to place Order");
       }
+
     } catch (error) {
       console.error("Error in Placing order", error);
-    }
+    };
 
-    // const order = {
-    //   id: Date.now(),
-    //   items: [...cart],
-    //   total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-    //   user: { ...user },
-    //   paymentMethod,
-    //   date: new Date().toISOString(),
-    //   status: 'Preparing'
-    // };
-
-    setOrderHistory([{
-      id: Date.now(),
-      items: [...cart],
-      total: totalAmount,
-      user: { ...user },
-      paymentMethod,
-      date: new Date().toISOString(),
-      status: 'Preparing'
-    }, ...orderHistory]);
-
-    setCart([]);
-    setCheckoutStep('confirmation');
-  };
-
+  }
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -197,6 +278,8 @@ export default function Menu() {
 
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
   const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const currentOrdersCount = currentOrders.length;
+  
 
   return (
     <div className="menu-page">
@@ -205,9 +288,63 @@ export default function Menu() {
         <p>Budget-friendly meals that taste like home</p>
       </div>
 
+      <div className="search-container">
+        <form onSubmit={handleSearch}>
+          <input
+            type="text"
+            placeholder="Search by food name or ID..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setSearchError('');
+              if (e.target.value.trim() === '') {
+                setSearchResults([]);
+              }
+            }}
+            className="search-input"
+          />
+          <button type="submit" className="search-button" disabled={isSearching}>
+            {isSearching ? 'Searching...' : 'Search'}
+          </button>
+        </form>
+
+        {searchError && (
+          <div className="search-error-message animate__animated animate__shakeX">
+            {searchError}
+          </div>
+        )}
+      </div>
+
+      {/* Show search results if they exist */}
+      {searchResults.length > 0 && (
+        <div className="search-results-section">
+          <h3>Search Results</h3>
+          <div className="menu-items">
+            {searchResults.map(item => (
+              <div key={item._id} className="menu-item">
+                <div className="item-image">
+                  <img src={item.foodImage} alt={item.foodName} />
+                </div>
+                <div className="item-details">
+                  <h3>{item.foodName}</h3>
+                  <p className="item-description">{item.foodDescription}</p>
+                  <p className="item-price">₹{item.foodPrice}</p>
+                  <p className="item-category">{item.foodCategory}</p>
+                </div>
+                <div className="item-actions">
+                  <button className="add-to-cart-btn" onClick={() => addToCart(item)}>
+                    Add +
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="menu-container">
         <div className="menu-items">
-          {Array.isArray(allfoodItems) ? (
+          {Array.isArray(allfoodItems) && allfoodItems.length > 0 ? (
             allfoodItems.map(item => (
               <div key={item._id} className="menu-item">
                 <div className="item-image">
@@ -293,8 +430,9 @@ export default function Menu() {
             <div className="user-details-summary">
               <h4>Delivery To</h4>
               <p><strong>Name:</strong> {user.name}</p>
-              <p><strong>Phone:</strong> {user.phone}</p>
-              <p><strong>Address:</strong> {user.address}</p>
+              <p><strong>Phone:</strong> {user.contact}</p>
+              <p><strong>Email:</strong> {user.email}</p>
+              <p><strong>College:</strong> {user.college}</p>
             </div>
 
             <div className="payment-options">
@@ -372,11 +510,69 @@ export default function Menu() {
         )}
       </div>
 
+      {/* {cart.length > 0 && checkoutStep === 'cart' && (
+          <button className="cart-toggle-btn" onClick={() => setIsCartOpen(!isCartOpen)}>
+            🛒 {totalItems}
+          </button>
+        )} */}
+
+      <div className={`current-orders-preview ${isCurrentOrdersOpen ? 'active' : ''}`}>
+        <button className="close-current-orders" onClick={() => setIsCurrentOrdersOpen(false)}>
+          ×
+        </button>
+
+        <h3>Your Current Orders ({currentOrdersCount})</h3>
+
+        {currentOrders.length > 0 ? (
+          <ul className="current-orders-list">
+            {currentOrders.map(order => (
+              <li key={order.id} className="current-order-item">
+                <div className="order-header">
+                  <span>Order #{order.id.toString().slice(-4)}</span>
+                  <span className={`status ${order.status.toLowerCase()}`}>
+                    {order.status}
+                  </span>
+                </div>
+                <div className="order-details">
+                  <ul>
+                    {order.items.map(item => (
+                      <li key={item.cartId}>
+                        {item.name} × {item.quantity}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="order-total">
+                    Total: ₹{order.total}
+                  </div>
+                </div>
+                <div className="order-footer">
+                  <span>{new Date(order.date).toLocaleString()}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="no-orders">You have no current orders</p>
+        )}
+      </div>
+
+      {/* Cart Toggle Button */}
       {cart.length > 0 && checkoutStep === 'cart' && (
         <button className="cart-toggle-btn" onClick={() => setIsCartOpen(!isCartOpen)}>
           🛒 {totalItems}
         </button>
       )}
+
+      {/* Current Orders Toggle Button */}
+      <button
+        className={`current-orders-toggle-btn ${currentOrdersCount > 0 ? 'has-orders' : ''}`}
+        onClick={() => setIsCurrentOrdersOpen(!isCurrentOrdersOpen)}
+      >
+        {currentOrdersCount > 0 ? (
+          <span className="orders-count">{currentOrdersCount}</span>
+        ) : null}
+        📝 Orders
+      </button>
     </div>
   );
 }
@@ -761,4 +957,3 @@ export default function Menu() {
 //       )}
 //     </div>
 //   );
-// }

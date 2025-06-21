@@ -946,3 +946,208 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Current Orders Styles */
+.current-orders-preview {
+  position: fixed;
+  right: -400px;
+  top: 0;
+  width: 380px;
+  height: 100vh;
+  background: white;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.current-orders-preview.active {
+  right: 0;
+}
+
+.close-current-orders {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.current-orders-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.current-order-item {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.status {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.status.preparing {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status.delivered {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status.cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.current-orders-toggle-btn {
+  position: fixed;
+  bottom: 111px;
+  right: 20px;
+  background: #3d4041;                 
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 999;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* #555252db */
+
+.current-orders-toggle-btn.has-orders {
+  background: #ff9800;
+}
+
+.orders-count {
+  background: white;
+  color: #ff9800;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.no-orders {
+  text-align: center;
+  margin-top: 40px;
+  color: #666;
+}
+
+/* Search Styles */
+.search-container {
+  margin: 20px auto;
+  max-width: 500px;
+  text-align: center;
+}
+
+.search-input {
+  width: 70%;
+  padding: 10px 15px;
+  border: 2px solid #ddd;
+  border-radius: 25px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.search-input:focus {
+  border-color: #4CAF50;
+}
+
+.search-button {
+  padding: 10px 20px;
+  margin-left: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.search-button:hover {
+  background-color: #45a049;
+}
+
+/* Messages */
+.search-error-message {
+  color: #d32f2f;
+  background-color: #fde0e0;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  animation: shake 0.5s;
+}
+
+.no-results-message {
+  color: #666;
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 15px;
+}
+
+.no-results-message p {
+  margin: 5px 0;
+}
+
+.suggestion {
+  font-size: 0.9em;
+  color: #888;
+}
+
+/* Animations */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+.animate__animated {
+  animation-duration: 0.5s;
+}
+
+.search-spinner {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.search-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* If using animate.css, you can remove the above animation classes */
