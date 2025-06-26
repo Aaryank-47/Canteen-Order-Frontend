@@ -15,6 +15,8 @@ export default function Menu() {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState('');
+  const [selectedCanteen, setSelectedCanteen] = useState('');
+  const [availableCanteens, setAvailableCanteens] = useState([]);
 
   const loadAllFoodItems = async () => {
     try {
@@ -32,8 +34,8 @@ export default function Menu() {
         console.log("data couldn't be fetched");
       }
 
-      console.log("Fetched foods: ", data.foodslist);
-      setAllFoodItems(data.foodslist);
+      console.log("Fetched foods: ", data.foodMenu);
+      setAllFoodItems(data.foodMenu);
     } catch (error) {
       console.error("Fetch error:", error);
     }
@@ -64,10 +66,100 @@ export default function Menu() {
     }
   }
 
+
+  const fetchCollegeCanteens = async () => {
+    try {
+      const response = await fetch('api/v1/colleges/get-college-canteens', {
+        method: 'GET',
+        credentials: 'include',
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch college canteens");
+      }
+
+      const data = await response.json();
+
+      if (!data) {
+        console.log("Error in fetching canteen Colleges : ", data.message);
+      }
+      console.log("All college canteens : ", data)
+      setAvailableCanteens(data.canteens || []);
+
+
+    } catch (error) {
+      console.error("Error fetching user data:", error.message);
+
+    }
+  }
+
+  const fetchCanteenMenu = async (adminId) => {
+    try {
+      if (!adminId) {
+        console.log("No adminId provided, skipping fetch");
+        // return;
+      }
+
+      const response = await fetch(`api/v1/foods/canteens-menu/${adminId}`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch canteens menu");
+      }
+
+      const data = await response.json();
+      if (!data) {
+        console.log("Error in getting datas of canteens menu : ", data.error);
+      }
+      console.log("Canteen menu data : ", data);
+      return data;
+
+    } catch (error) {
+      console.log("Catch Error in fetching cateens menu : ", error.message)
+      throw error;
+    }
+  }
+
+  // New handler for canteen selection
+  const handleCanteenSelect = async (e) => {
+    const selectedCanteenId = e.target.value;
+    setSelectedCanteen(selectedCanteenId);
+
+    try {
+      if (selectedCanteenId) {
+        const menuData = await fetchCanteenMenu(selectedCanteenId);
+        setAllFoodItems(menuData.foodslist || []);
+      } else {
+        // If "All Canteens" selected, load all food items
+        await loadAllFoodItems();
+      }
+    } catch (error) {
+
+      console.log('Error : ', `Failed to load menu: ${error.message}`);
+    }
+  };
+  const filteredFoodItems = selectedCanteen
+    ? allfoodItems.filter(item =>
+      String(item.adminId?._id || item.adminId) === String(selectedCanteen)
+    )
+    : allfoodItems;
+
+
+  console.log("Selected Canteen:", selectedCanteen);
+  console.log("All Food Items:", allfoodItems);
+  console.log("Filtered Items:", filteredFoodItems);
+
+
+
   useEffect(() => {
     loadAllFoodItems();
     fetchUser();
+    fetchCollegeCanteens();
+    // fetchCanteenMenu();
   }, []);
+
 
   const fetchSingleFoodItem = async (foodId) => {
 
@@ -110,50 +202,25 @@ export default function Menu() {
       return;
     }
 
-    // Check if search term looks like an ID (24 character hex string)
     const isIdSearch = /^[0-9a-fA-F]{24}$/.test(searchTerm.trim());
 
     try {
-
       if (isIdSearch) {
         const foodItem = await fetchSingleFoodItem(searchTerm.trim());
-
-        if (foodItem) {
-          setSearchResults([foodItem]);
-        } else {
-          setSearchResults([]);
-          setSearchError(`No food item found with ID: ${searchTerm}`);
-        }
+        setSearchResults(foodItem ? [foodItem] : []);
       } else {
-        const results = allfoodItems.filter(item =>
+        const results = filteredFoodItems.filter(item =>
           item.foodName.toLowerCase().includes(searchTerm.toLowerCase())
-          // item.foodCategory.toLowerCase().includes(searchTerm.toLowerCase())
         );
-
         setSearchResults(results);
-
-        if (results.length === 0) {
-          setSearchError(`No food items found for "${searchTerm}"`);
-        }
-
       }
     } catch (error) {
       console.error("Search error:", error);
       setSearchError("Error searching for food items");
     }
-
-
-
-
   }
 
   const addToCart = (item) => {
-    const normalizedItem = {
-      ...item,
-      name: item.foodName,
-      price: item.foodPrice
-    };
-
     const existingItem = cart.find(cartItem => cartItem._id === item._id);
     if (existingItem) {
       setCart(cart.map(cartItem =>
@@ -162,10 +229,35 @@ export default function Menu() {
           : cartItem
       ));
     } else {
-      setCart([...cart, { ...normalizedItem, quantity: 1, cartId: Date.now() }]);
+      setCart([...cart, {
+        ...item,
+        quantity: 1,
+        cartId: Date.now(),
+        name: item.foodName,
+        price: item.foodPrice
+      }]);
     }
     setIsCartOpen(true);
   };
+  // const addToCart = (item) => {
+  //   const normalizedItem = {
+  //     ...item,
+  //     name: item.foodName,
+  //     price: item.foodPrice
+  //   };
+
+  //   const existingItem = cart.find(cartItem => cartItem._id === item._id);
+  //   if (existingItem) {
+  //     setCart(cart.map(cartItem =>
+  //       cartItem._id === item._id
+  //         ? { ...cartItem, quantity: cartItem.quantity + 1 }
+  //         : cartItem
+  //     ));
+  //   } else {
+  //     setCart([...cart, { ...normalizedItem, quantity: 1, cartId: Date.now() }]);
+  //   }
+  //   setIsCartOpen(true);
+  // };
 
 
   const removeFromCart = (cartId) => {
@@ -196,11 +288,16 @@ export default function Menu() {
 
   const handlePlaceOrder = async () => {
 
+    if (!selectedCanteen) {
+      alert('Please select a canteen before placing your order');
+      return;
+    }
+
     const userId = localStorage.getItem('userId')
 
     try {
 
-      const response = await fetch('api/v1/orders/place-order', {
+      const response = await fetch(`api/v1/orders/admins/${selectedCanteen}/place-order`, {
         method: 'POST',
         credentials: 'include',
 
@@ -279,7 +376,7 @@ export default function Menu() {
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
   const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const currentOrdersCount = currentOrders.length;
-  
+
 
   return (
     <div className="menu-page">
@@ -315,6 +412,24 @@ export default function Menu() {
         )}
       </div>
 
+      {/* Canteen Filter Dropdown */}
+      <div className="filter-container">
+        <label htmlFor="canteen-filter">Select canteen to view its menu:</label>
+        <select
+          id="canteen-filter"
+          value={selectedCanteen}
+          onChange={handleCanteenSelect}
+          className="canteen-filter-dropdown"
+        >
+          <option value="">All Canteens (Show everything)</option>
+          {availableCanteens.map(canteen => (
+            <option key={canteen.id} value={canteen.id}>
+              {canteen.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Show search results if they exist */}
       {searchResults.length > 0 && (
         <div className="search-results-section">
@@ -342,10 +457,12 @@ export default function Menu() {
         </div>
       )}
 
+      {/* Main Menu Items */}
+
       <div className="menu-container">
         <div className="menu-items">
-          {Array.isArray(allfoodItems) && allfoodItems.length > 0 ? (
-            allfoodItems.map(item => (
+          {Array.isArray(filteredFoodItems) && filteredFoodItems.length > 0 ? (
+            filteredFoodItems.map(item => (
               <div key={item._id} className="menu-item">
                 <div className="item-image">
                   <img src={item.foodImage} alt={item.foodName} />
@@ -364,7 +481,11 @@ export default function Menu() {
               </div>
             ))
           ) : (
-            <p>No items found.</p>
+            <p className="no-items-message">
+              {selectedCanteen
+                ? "No active food items available from this canteen"
+                : "No items found"}
+            </p>
           )}
         </div>
       </div>

@@ -225,10 +225,14 @@ export default function College() {
 
   const fetchSelectedCanteens = async () => {
     const collegeId = localStorage.getItem("CollegeId");
+    if (!collegeId) {
+      setAffiliatedCanteens([]);
+      return;
+    }
     console.log("Fetching selected canteens for collegeId:", collegeId);
     try {
 
-      const response = await fetch(`http://localhost:5000/api/v1/colleges/get-selected-canteens/${collegeId}`, {
+      const response = await fetch(`http://localhost:5000/api/v1/colleges/college-canteens/${collegeId}`, {
         method: 'GET',
         credentials: 'include'
       });
@@ -239,7 +243,9 @@ export default function College() {
         throw new Error(data.message || "Failed to fetch selected canteens");
       }
 
-      setAffiliatedCanteens(data.selectedCanteens);
+      console.log("Fetching added canteens : ",data);
+
+      setAffiliatedCanteens(data.canteens || []);
     } catch (error) {
       console.error("Error fetching selected canteens:", error.message);
     }
@@ -257,7 +263,7 @@ export default function College() {
     if (!collegeId) {
       console.error("College ID not found in localStorage");
     }
-    
+
     console.log("Adding canteens for collegeId:", collegeId);
     console.log("Selected canteens to add:", selectedCanteens);
     if (selectedCanteens.length === 0) return;
@@ -442,11 +448,15 @@ export default function College() {
                     onChange={handleCanteenSelect}
                     className="canteen-select"
                   >
-                    {canteens.map(canteen => (
-                      <option key={canteen._id} value={canteen._id}>
-                        {canteen.adminName}
-                      </option>
-                    ))}
+                    {canteens?.length > 0 ? (
+                      canteens.map(canteen => (
+                        <option key={canteen._id} value={canteen._id}>
+                          {canteen.adminName}
+                        </option>
+                      ))
+                    ) : (
+                      <option disabled>No canteens available</option>
+                    )}
                   </select>
                 </div>
                 <p className="select-hint">Hold Ctrl/Cmd to select multiple canteens</p>
@@ -461,11 +471,11 @@ export default function College() {
 
               <div className="affiliated-canteens-box">
                 <h3>Affiliated Canteens</h3>
-                {affiliatedCanteens.length > 0 ? (
+                {affiliatedCanteens?.length > 0 ? (
                   <ul className="affiliated-list">
                     {affiliatedCanteens.map(canteen => (
                       <li key={canteen._id} className="affiliated-item">
-                        {canteen.adminName}
+                        {canteen.name}
                       </li>
                     ))}
                   </ul>
