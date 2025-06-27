@@ -243,7 +243,7 @@ export default function College() {
         throw new Error(data.message || "Failed to fetch selected canteens");
       }
 
-      console.log("Fetching added canteens : ",data);
+      console.log("Fetching added canteens : ", data);
 
       setAffiliatedCanteens(data.canteens || []);
     } catch (error) {
@@ -469,20 +469,17 @@ export default function College() {
                 </button>
               </div>
 
-              <div className="affiliated-canteens-box">
-                <h3>Affiliated Canteens</h3>
-                {affiliatedCanteens?.length > 0 ? (
-                  <ul className="affiliated-list">
-                    {affiliatedCanteens.map(canteen => (
-                      <li key={canteen._id} className="affiliated-item">
-                        {canteen.name}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="no-canteens">No canteens affiliated yet</p>
-                )}
-              </div>
+              {affiliatedCanteens?.length > 0 ? (
+                <ul className="affiliated-list">
+                  {affiliatedCanteens.map(canteen => (
+                    <li key={canteen?._id || canteen?.name} className="affiliated-item">
+                      {canteen?.name || 'Unnamed Canteen'}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="no-canteens">No canteens affiliated yet</p>
+              )}
             </div>
           </div>
         </div>
