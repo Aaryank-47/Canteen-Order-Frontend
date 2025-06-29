@@ -1,4 +1,4 @@
-/* Order History - Inspired by L'Epicurieux */
+
 .order-history-page {
   font-family: 'Playfair Display', serif;
   color: #2d2d2d;
@@ -162,4 +162,13 @@
 .order-status.cancelled {
   background-color: #f8d7da;
   color: #721c24;
+}
+
+.flex-col-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
 }

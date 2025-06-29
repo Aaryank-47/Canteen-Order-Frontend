@@ -890,6 +890,104 @@
 }
 
 /* ================== */
+/* Food Availablility */
+/* ================== */
+
+/* Availability Styles */
+.menu-item.unavailable {
+  opacity: 0.8;
+  position: relative;
+  filter: grayscale(30%);
+}
+
+.unavailable-banner {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  background-color: rgba(220, 53, 69, 0.9);
+  color: white;
+  text-align: center;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 0.9em;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.availability-status {
+  margin-top: 8px;
+  font-size: 0.9em;
+}
+
+.availability-status .available {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.availability-status .unavailable {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.add-to-cart-btn.disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.cart-item-unavailable {
+  color: #dc3545;
+  font-size: 0.8em;
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+/* Cart styles for unavailable items */
+.cart-items li .cart-item-info .cart-item-unavailable {
+  display: block;
+  color: #dc3545;
+  font-size: 0.8em;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+/* For specific canteen view */
+.menu-item.canteen-specific-view.unavailable {
+  opacity: 0.7;
+  filter: grayscale(50%);
+}
+
+.unavailable-banner {
+  display: none;
+}
+
+.canteen-specific-view .unavailable-banner {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  background: rgba(220, 53, 69, 0.9);
+  color: white;
+  text-align: center;
+  padding: 5px;
+  font-size: 0.9em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .unavailable-banner {
+    font-size: 0.8em;
+    padding: 3px;
+  }
+  
+  .availability-status {
+    font-size: 0.8em;
+  }
+}
+
+/* ================== */
 /* KEYFRAME ANIMATIONS */
 /* ================== */
 
