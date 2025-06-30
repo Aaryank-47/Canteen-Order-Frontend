@@ -41,7 +41,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
       console.log("Response status:", response.status);
 
       const data = await response.json();
-      if(!data){
+      if (!data) {
         console.error("No data received from the server.", data.message);
       }
       console.log("Login response data : ", data)
@@ -152,6 +152,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
           onSuccess={async (res) => {
             console.log("Google Login Success:", res);
             const idtoken = res.credential;
+            console.log(" idtoken : ", idtoken);
             try {
               // Handle successful login logic here
               const response = await fetch("http://localhost:5000/api/v1/users/google-login", {
@@ -163,8 +164,29 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
                 body: JSON.stringify({ idToken: idtoken })
               });
 
+              if (!response.ok) {
+                throw new Error('Google Login Response Failed ......')
+              }
+
               const data = await response.json();
+              if (!data) {
+                console.log('Fetching user data got failed via google login .... : ', data.message);
+              }
+
               console.log("Backend Response:", data);
+
+              console.log("Google Login Success:", res);
+
+              // const { user, userToken, userId } = data;
+
+              localStorage.setItem("userToken", data.userToken); 
+              localStorage.setItem("userId", data.userId);
+              localStorage.setItem("userData", JSON.stringify(data.user));
+
+              // // Reflect login in UI
+              onLoginSuccess(data.user);
+              onClose();
+
             } catch (error) {
               console.error("Error during Google login:", error);
             }

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./NavCSS.css";
 
-export default function SignupPg({ isOpen, onClose, onLoginClick }) {
+export default function SignupPg({ isOpen, onClose, onLoginClick, onLoginSuccess }) {
   const [formData, setFormData] = useState({
     name: "", college: "", contact: "", email: "", password: "", confirmPassword: ""
   });
@@ -192,8 +192,49 @@ export default function SignupPg({ isOpen, onClose, onLoginClick }) {
 
         <strong className="signup-type">Sign up with Google</strong>
         <GoogleLogin
-          onSuccess={res => console.log("Google Signup Success:", res)}
-          onError={() => console.log("Google Signup Failed")}
+          onSuccess={async (res) => {
+            console.log("Google Login Success:", res);
+            const idtoken = res.credential;
+            console.log(" idtoken : ", idtoken);
+            try {
+              // Handle successful login logic here
+              const response = await fetch("http://localhost:5000/api/v1/users/google-login", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({ idToken: idtoken })
+              });
+
+              if (!response.ok) {
+                throw new Error('Google Login Response Failed ......')
+              }
+
+              const data = await response.json();
+              if (!data) {
+                console.log('Fetching user data got failed via google login .... : ', data.message);
+              }
+
+              console.log("Backend Response:", data);
+
+              console.log("Google Login Success:", res);
+
+              // const { user, userToken, userId } = data;
+
+              localStorage.setItem("userToken", data.userToken);
+              localStorage.setItem("userId", data.userId);
+              localStorage.setItem("userData", JSON.stringify(data.user));
+
+              // // Reflect login in UI
+              onLoginSuccess(data.user);
+              onClose();
+
+            } catch (error) {
+              console.error("Error during Google login:", error);
+            }
+          }}
+          onError={() => console.log("Login Failed")}
         />
       </div>
     </div>
