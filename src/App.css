@@ -1,8 +1,18 @@
-*{
+body,
+html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+* {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
 }
+
 /* Enhanced Home Page with Animations */
 :root {
     --primary-orange: #fc8019;
@@ -706,9 +716,10 @@
     justify-content: center;
     /* margin-left: auto; */
 }
+
 /* Contact us in footer */
 
-.contact-ul li::before{
+.contact-ul li::before {
     content: none !important;
     display: none !important;
 }
@@ -746,7 +757,7 @@
     width: 100%;
 }
 
-.PP li::before{
+.PP li::before {
     content: none !important;
     display: none !important;
 }

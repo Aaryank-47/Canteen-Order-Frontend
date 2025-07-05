@@ -1,7 +1,10 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Bokor&display=swap'); */
 /* @import url('https://fonts.googleapis.com/css2?family=Bokor&family=Permanent+Marker&display=swap'); */
 /* @import url('https://st3.depositphotos.com/4431055/12920/i/450/depositphotos_129206658-stock-photo-wooden-texture-with-various-dishes.jpg'); */
-
+body {
+  margin: 0%;
+  padding: 0%;
+}
 
 * {
   list-style: none;
@@ -21,6 +24,8 @@
 
 /* Base Styles */
 .nav {
+  margin: 0%;
+  padding: 0%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -59,6 +64,7 @@
   /* Changed to 'all' for smoother transitions */
   padding: 5px;
   border: 2.5px solid transparent;
+  white-space: nowrap;
   /* Invisible border by default */
 }
 
@@ -101,7 +107,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-left: auto; /* Pushes to the right */
+  margin-left: auto;
+  /* Pushes to the right */
 }
 
 /* Profile button */
@@ -134,7 +141,8 @@
 /* Initials fallback */
 .profile-initials {
   font-weight: 600;
-  color: #fc8019; /* Your theme color */
+  color: #fc8019;
+  /* Your theme color */
   font-size: 18px;
 }
 
@@ -168,7 +176,8 @@
 
 /* Login button */
 #login {
-  background: #fc8019; /* Your theme color */
+  background: #fc8019;
+  /* Your theme color */
   color: white;
   border: none;
   padding: 8px 16px;
@@ -176,11 +185,13 @@
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
-  margin-left: auto; /* Aligns to the right */
+  margin-left: auto;
+  /* Aligns to the right */
 }
 
 #login:hover {
-  background: #e67300; /* Darker shade */
+  background: #e67300;
+  /* Darker shade */
   transform: translateY(-1px);
 }
 

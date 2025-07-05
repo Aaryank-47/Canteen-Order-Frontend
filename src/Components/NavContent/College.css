@@ -1,8 +1,194 @@
-/* College Page - Inspired by L'Epicurieux */
+/* Modernized College Page Styling */
+
 .college-page {
+  font-family: 'Inter', sans-serif;
+  color: #1a1a1a;
+  background-color: #fafafa;
+  max-width: 1280px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+}
+
+.auth-modal {
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-modal h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #111;
+  text-align: center;
+}
+
+.auth-modal input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  background-color: #fff;
+}
+
+.auth-modal input:focus {
+  border-color: #fc8019;
+  outline: none;
+  background-color: #fefefe;
+}
+
+.auth-modal button {
+  background-color: #fc8019;
+  color: #fff;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.auth-modal button:hover {
+  background-color: #e67300;
+  transform: translateY(-1px);
+}
+
+.auth-modal p {
+  font-size: 0.9rem;
+  text-align: center;
+  color: #555;
+}
+
+.college-dashboard {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.college-info h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.college-name {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+.logout-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f;
+}
+
+.canteen-management h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.canteen-select-box {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.canteen-select {
+  width: 100%;
+  min-height: 180px;
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: white;
+}
+
+.add-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-btn:hover {
+  background-color: #45a049;
+}
+
+.affiliated-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.affiliated-item {
+  padding: 0.8rem 1rem;
+  background: #eef6ff;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.toast-success { background-color: #4caf50; color: white; }
+.toast-warning { background-color: #ffa726; color: white; }
+.toast-error { background-color: #f44336; color: white; }
+
+@media (max-width: 768px) {
+  .college-page {
+    padding: 2rem 1rem;
+  }
+
+  .auth-modal,
+  .college-dashboard {
+    padding: 2rem 1rem;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+
+
+/* College Page - Inspired by L'Epicurieux */
+/* .college-page {
   font-family: 'Playfair Display', serif;
   color: #2d2d2d;
-  max-width: 1200px;
+  max-width`: 1200px;
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
@@ -174,7 +360,7 @@
   border-radius: 4px;
 }
 
-/* Toast styles */
+
 .custom-toast {
   padding: 0.5rem;
 }
@@ -205,14 +391,13 @@
   color: white !important;
 }
 
-/* Disabled state styles */
 button:disabled,
 input:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-/* Dashboard Header Styles */
+
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -222,7 +407,7 @@ input:disabled {
   border-bottom: 1px solid #eee;
 }
 
-/* Logout Button Styles */
+
 .logout-button {
   background-color: #f44336;
   color: white;
@@ -249,7 +434,6 @@ input:disabled {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Optional icon using pseudo-element */
 .logout-button::before {
   content: "→";
   display: inline-block;
@@ -257,7 +441,6 @@ input:disabled {
   margin-right: 5px;
 }
 
-/* Canteen Management Styles */
 .canteen-lists-container {
   display: flex;
   gap: 2rem;
@@ -334,7 +517,6 @@ input:disabled {
   padding: 1rem;
 }
 
-/* College Dashboard Header */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -354,7 +536,6 @@ input:disabled {
   font-weight: normal;
 }
 
-/* Canteen Management */
 .canteen-selection-container {
   display: flex;
   gap: 2rem;
@@ -450,7 +631,6 @@ input:disabled {
   padding: 1rem;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -469,7 +649,6 @@ input:disabled {
   background: #555;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .college-page {
     padding: 1rem;
@@ -483,4 +662,4 @@ input:disabled {
   .college-dashboard {
     padding: 2rem 1.5rem;
   }
-}
+} */
