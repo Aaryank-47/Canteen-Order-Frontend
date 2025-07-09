@@ -18,7 +18,8 @@ export default function SignupPg({ isOpen, onClose, onLoginClick, onLoginSuccess
       setCollegesLoading(true);
       try {
 
-        const response = await fetch("http://localhost:5000/api/v1/colleges/all-colleges");
+        // const response = await fetch("http://localhost:5000/api/v1/colleges/all-colleges");
+        const response = await fetch("https://canteen-order-backend.onrender.com/api/v1/colleges/all-colleges");
         const data = await response.json();
         if (!data) {
           console.error("No data received from colleges API", data.message);
@@ -74,7 +75,8 @@ export default function SignupPg({ isOpen, onClose, onLoginClick, onLoginSuccess
     setLoading(true)
     try {
 
-      const response = await fetch("http://localhost:5000/api/v1/users/signup", {
+      // const response = await fetch("http://localhost:5000/api/v1/users/signup", {
+      const response = await fetch("https://canteen-order-backend.onrender.com/api/v1/users/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -198,7 +200,8 @@ export default function SignupPg({ isOpen, onClose, onLoginClick, onLoginSuccess
             console.log(" idtoken : ", idtoken);
             try {
               // Handle successful login logic here
-              const response = await fetch("http://localhost:5000/api/v1/users/google-login", {
+              // const response = await fetch("http://localhost:5000/api/v1/users/google-login", {
+              const response = await fetch("https://canteen-order-backend.onrender.com/api/v1/users/google-login", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import './Menu.css';
+// import thumbsDownAnimation from '../../assets/thumbs_down.json'
+import noFoodAnimation from '../../assets/NoFoods.json'
+import { Player } from '@lottiefiles/react-lottie-player';
+
 
 export default function Menu() {
   const [cart, setCart] = useState([]);
@@ -45,33 +49,61 @@ export default function Menu() {
   };
 
   const fetchUser = async () => {
+
+    const userToken = localStorage.getItem('userToken');
+    console.log("userToken via fetchCollegeCanteens : ", userToken);
+
     try {
       const response = await fetch('api/v1/users/get-user', {
         method: 'GET',
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${userToken}`,
+          'Content-Type': 'application/json'
+        }
       });
       if (!response.ok) {
         throw new Error("Failed to fetch user data");
       }
       const data = await response.json();
+      if (!data) {
+        console.log("Error in fethcing user data : ", data.message);
+      }
+      console.log(" data data via fetchUser : ", data);
       setUser(data.user);
+
     } catch (error) {
       console.error("Error fetching user data:", error.message);
     }
   }
 
   const fetchCollegeCanteens = async () => {
+    const userToken = localStorage.getItem('userToken');
+    console.log("userToken via fetchCollegeCanteens : ", userToken);
+
     try {
       const response = await fetch('api/v1/colleges/get-college-canteens', {
         method: 'GET',
         credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${userToken}`,
+          'Content-Type': 'application/json'
+        }
       })
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch college canteens");
-      }
 
       const data = await response.json();
+      if (!response.ok) {
+        throw new Error("Failed to fetch college canteens : ", data.message);
+      }
+      if (!data) {
+        console.log("Error in fetching the college-canteens data  : ", data.message);
+      }
+      console.log("college canteens data : ", data);
+
+      // console.log("data.canteens || [] : ", setAvailableCanteens(data.canteens || []))
+
+
       setAvailableCanteens(data.canteens || []);
     } catch (error) {
       console.error("Error fetching canteens:", error.message);
@@ -116,11 +148,11 @@ export default function Menu() {
   };
 
   const filteredFoodItems = selectedCanteen
-  ? allfoodItems.filter(item => 
-      String(item.adminId?._id || item.adminId) === String(selectedCanteen) && 
+    ? allfoodItems.filter(item =>
+      String(item.adminId?._id || item.adminId) === String(selectedCanteen) &&
       (selectedCanteen ? item.isActive : true) // Only filter by isActive for specific canteen
     )
-  : allfoodItems;
+    : allfoodItems;
 
   useEffect(() => {
     loadAllFoodItems();
@@ -239,14 +271,18 @@ export default function Menu() {
     }
 
     const userId = localStorage.getItem('userId');
+    const userToken = localStorage.getItem('userToken');
+    console.log("userToken via fetchCollegeCanteens : ", userToken);
 
     try {
       const response = await fetch(`api/v1/orders/admins/${selectedCanteen}/place-order`, {
         method: 'POST',
         credentials: 'include',
         headers: {
-          "Content-Type": "application/json",
+          'Authorization': `Bearer ${userToken}`,
+          'Content-Type': 'application/json'
         },
+
         body: JSON.stringify({
           userId: userId,
           foodItems: cart.map(item => ({
@@ -257,6 +293,11 @@ export default function Menu() {
       });
 
       const data = await response.json();
+      if (!data) {
+        console.log("Unabble to place order data : ", data.message);
+      }
+      console.log("place order datas : ", data);
+
       if (!response.ok) {
         throw new Error(data.message || "Unable to place Order");
       }
@@ -273,9 +314,12 @@ export default function Menu() {
 
       setCurrentOrders([newOrder, ...currentOrders]);
       setOrderHistory([newOrder, ...orderHistory]);
+
       setCart([]);
+
       setCheckoutStep('confirmation');
       toast.success('Order placed successfully!');
+
     } catch (error) {
       console.error("Error in Placing order", error);
       toast.error(error.message || "Failed to place order");
@@ -313,6 +357,32 @@ export default function Menu() {
   const currentOrdersCount = currentOrders.length;
 
   const renderMenuItems = (items) => {
+    if (items.length === 0) {
+      return (
+        <div className="full-width-animation-container">
+          <div className="no-items-content">
+            <Player
+              autoplay
+              loop
+              src={noFoodAnimation}
+              style={{ height: '200px', width: '200px' }}
+            />
+            {/* <Player
+              autoplay
+              loop
+              src={thumbsDownAnimation}
+              style={{ height: '150px', width: '150px' }}
+            /> */}
+            <p className="no-items-message">
+              {selectedCanteen
+                ? "No active food items available from this canteen"
+                : "No items found"}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
     return items.map(item => (
       <div key={item._id} className={`menu-item ${selectedCanteen && !item.isActive ? 'unavailable' : ''}`}>
         <div className="item-image">
@@ -414,11 +484,25 @@ export default function Menu() {
           {Array.isArray(filteredFoodItems) && filteredFoodItems.length > 0 ? (
             renderMenuItems(filteredFoodItems)
           ) : (
-            <p className="no-items-message">
-              {selectedCanteen
-                ? "No active food items available from this canteen"
-                : "No items found"}
-            </p>
+            <div className="no-items-container">
+              <Player
+                autoplay
+                loop
+                src={noFoodAnimation}
+                style={{ height: '200px', width: '200px' }}
+              />
+              {/* <Player
+                autoplay
+                loop
+                src={thumbsDownAnimation}
+                style={{ height: '150px', width: '150px' }}
+              /> */}
+              <p className="no-items-message">
+                {selectedCanteen
+                  ? "No active food items available from this canteen"
+                  : "No items found"}
+              </p>
+            </div>
           )}
         </div>
       </div>

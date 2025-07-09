@@ -3,11 +3,13 @@ import './OrderHistory.css';
 import { Player } from '@lottiefiles/react-lottie-player';
 import loginAnimation from '../../assets/user-req-login.json';
 import noOrdersAnimation from '../../assets/No_order.json';
+import loadingAnimation from '../../assets/loading.json'
 
 export default function OrderHistory() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isDelayedLoading, setIsDelayedLoading] = useState(false);
 
   const userId = localStorage.getItem("userId");
 
@@ -17,9 +19,17 @@ export default function OrderHistory() {
       return;
     }
 
+    // Set delayed loading after 2 seconds if still loading
+    const delayTimer = setTimeout(() => {
+      if (loading) {
+        setIsDelayedLoading(true);
+      }
+    }, 2000);
+
     const showOrderHistory = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/v1/orders/order-history/${userId}`, {
+        // const response = await fetch(`http://localhost:5000/api/v1/orders/order-history/${userId}`, {
+        const response = await fetch(`https://canteen-order-backend.onrender.com/api/v1/orders/order-history/${userId}`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include'
@@ -43,11 +53,30 @@ export default function OrderHistory() {
         setError(err.message || "Something went wrong");
       } finally {
         setLoading(false);
+        setIsDelayedLoading(false);
+        clearTimeout(delayTimer);
       }
     };
 
     showOrderHistory();
+
+    return () => clearTimeout(delayTimer);
   }, [userId]);
+
+  // Show loading animation when API is taking time (only if orders will exist)
+  if (isDelayedLoading && userId) {
+    return (
+      <div className="order-history-page flex-col-center">
+        <Player 
+          autoplay 
+          loop 
+          src={loadingAnimation} 
+          style={{ height: '300px', width: '300px' }} 
+        />
+        <h2 className="text-xl font-semibold mt-4">Loading your order history...</h2>
+      </div>
+    );
+  }
 
   // If user is not logged in
   if (!userId) {

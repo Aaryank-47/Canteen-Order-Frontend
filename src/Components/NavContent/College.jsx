@@ -66,22 +66,53 @@ export default function College() {
 
   useEffect(() => {
     const verifyAuth = async () => {
+
+      const collegeId = localStorage.getItem('collegeId');
+      const college = localStorage.getItem("college");
+      const collegeToken = localStorage.getItem('collegeToken');
+
+      console.log("collegeId : ", collegeId);
+      console.log("college : ", college);
+
+      if (!collegeToken) {
+        console.log("No token found, logging out");
+        setIsLoggedIn(false);
+        setCollege(null);
+        setShowRegistration(false); // ⬅️ set to false if you want Login, true if Registration
+        return;
+      }
+
       try {
-        const response = await fetch('http://localhost:5000/api/v1/colleges/verify-college-token', {
+        // const response = await fetch('http://localhost:5000/api/v1/colleges/verify-college-token', {
+        const response = await fetch('https://canteen-order-backend.onrender.com/api/v1/colleges/verify-college-token', {
           method: 'GET',
-          credentials: 'include'
+          credentials: 'include',
+          headers: {
+            'Authorization': `Bearer ${collegeToken}`,
+            'Content-Type': 'application/json'
+          }
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          setIsLoggedIn(true);
-          setCollege(data.college);
-          localStorage.setItem("CollegeId", data.college._id);
-        } else {
-          localStorage.removeItem("CollegeId");
-          localStorage.removeItem("CollegeToken");
-          setIsLoggedIn(false);
+        const data = await response.json();
+        if (!data) {
+          console.log('Can not get the data : ', data.mesage);
         }
+        console.log("college data verification-token : ", data);
+
+        if (!response.ok || !data?.college) {
+          console.log('Unauthorized or invalid response, logging out user');
+          localStorage.removeItem("collegeId");
+          localStorage.removeItem("collegeToken");
+          setIsLoggedIn(false);
+          setCollege(null);
+          setShowRegistration(false);
+          return;
+        }
+
+        setCollege(college);
+        console.log("data.college via verifyAuth: ", data.college);
+        setIsLoggedIn(true);
+
       } catch (error) {
         console.error("Auth verification error:", error);
       }
@@ -102,7 +133,8 @@ export default function College() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/v1/colleges/register', {
+      // const response = await fetch('http://localhost:5000/api/v1/colleges/register', {
+      const response = await fetch('https://canteen-order-backend.onrender.com/api/v1/colleges/register', {
         method: 'POST',
         credentials: 'include',
         headers: { "Content-Type": "application/json" },
@@ -150,7 +182,8 @@ export default function College() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/v1/colleges/login', {
+      // const response = await fetch('http://localhost:5000/api/v1/colleges/login', {
+      const response = await fetch('https://canteen-order-backend.onrender.com/api/v1/colleges/login', {
         method: 'POST',
         credentials: 'include',
         headers: { "Content-Type": "application/json" },
@@ -162,12 +195,26 @@ export default function College() {
       });
 
       const data = await response.json();
+      if (!data) {
+        console.log("Error in getting login-data : ", data.message);
+      }
+      console.log(" Login data : ", data);
 
       if (!response.ok) {
         throw new Error(data.message || 'Login failed. Please check your credentials.');
       }
 
-      setCollege(data.college);
+      localStorage.setItem("collegeId", data.college.collegeId);
+      localStorage.setItem("collegeToken", data.collegeToken);
+      localStorage.setItem("college", data.college);
+
+      setCollege({
+        collegeId: data.college.collegeId,
+        collegeName: data.college.collegeName,
+        collegeEmail: data.college.collegeEmail,
+      });
+      console.log("data.college : ", data.college)
+
       showToast('success', 'Login Successful!', 'Welcome to your college dashboard.', 3000);
       setIsLoggedIn(true);
 
@@ -182,17 +229,31 @@ export default function College() {
   // Handle logout
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/v1/colleges/logout', {
+      // const response = await fetch('http://localhost:5000/api/v1/colleges/logout', {
+      const response = await fetch('https://canteen-order-backend.onrender.com/api/v1/colleges/logout', {
         method: 'POST',
         credentials: 'include'
       });
 
       if (response.ok) {
-        localStorage.removeItem("CollegeId");
+
+        const data = response.json();
+        if (!data) {
+          console.log("Error in fetching logout funcitonality data : ", data.message);
+        }
+        console.log("Logged out data : ", data);
+
+        localStorage.removeItem("collegeId");
+        localStorage.removeItem("collegeToken");
+
         setIsLoggedIn(false);
+        console.log("setCollege(college) : ", college);
+
         setCollege(null);
+        console.log("setCollege(null) :  ", setCollege(null));
         setShowRegistration(true);
         showToast('success', 'Logged Out', 'You have been successfully logged out.');
+
       } else {
         throw new Error('Logout failed');
       }
@@ -203,7 +264,8 @@ export default function College() {
 
   const fetchAllCanteens = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/v1/admin/get-all-admins', {
+      // const response = await fetch('http://localhost:5000/api/v1/admin/get-all-admins', {
+      const response = await fetch('https://canteen-order-backend.onrender.com/api/v1/admin/get-all-admins', {
         method: 'GET',
         credentials: 'include'
       });
@@ -224,7 +286,8 @@ export default function College() {
   }
 
   const fetchSelectedCanteens = async () => {
-    const collegeId = localStorage.getItem("CollegeId");
+    const collegeId = localStorage.getItem("collegeId");
+
     if (!collegeId) {
       setAffiliatedCanteens([]);
       return;
@@ -232,18 +295,23 @@ export default function College() {
     console.log("Fetching selected canteens for collegeId:", collegeId);
     try {
 
-      const response = await fetch(`http://localhost:5000/api/v1/colleges/college-canteens/${collegeId}`, {
+      // const response = await fetch(`http://localhost:5000/api/v1/colleges/college-canteens/${collegeId}`, {
+      const response = await fetch(`https://canteen-order-backend.onrender.com/api/v1/colleges/college-canteens/${collegeId}`, {
         method: 'GET',
         credentials: 'include'
       });
 
       const data = await response.json();
+      if (!data) {
+        console.log("Error in fetching selected canteens : ", data.message);
+      }
+      console.log("GET SELECTED CANTEENS DATA : ", data);
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to fetch selected canteens");
       }
 
-      console.log("Fetching added canteens : ", data);
+      // console.log("Fetching added canteens : ", data);
 
       setAffiliatedCanteens(data.canteens || []);
     } catch (error) {
@@ -259,10 +327,11 @@ export default function College() {
   }, [isLoggedIn]);
 
   const handleAddCanteens = async () => {
-    const collegeId = localStorage.getItem("CollegeId");
+    const collegeId = localStorage.getItem("collegeId");
     if (!collegeId) {
       console.error("College ID not found in localStorage");
     }
+    const collegeToken = localStorage.getItem('collegeToken');
 
     console.log("Adding canteens for collegeId:", collegeId);
     console.log("Selected canteens to add:", selectedCanteens);
@@ -270,14 +339,22 @@ export default function College() {
 
     try {
       setIsAdding(true);
-      const response = await fetch(`http://localhost:5000/api/v1/colleges/add-college-canteens/${collegeId}`, {
+      // const response = await fetch(`http://localhost:5000/api/v1/colleges/add-college-canteens/${collegeId}`, {
+      const response = await fetch(`https://canteen-order-backend.onrender.com/api/v1/colleges/add-college-canteens/${collegeId}`, {
         method: 'POST',
         credentials: 'include',
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          'Authorization': `Bearer ${collegeToken}`,
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({ adminIds: selectedCanteens })
       });
 
       const data = await response.json();
+      if (!data) {
+        console.log("Error in fetching the data : ", data.message);
+      }
+      console.log("Adding Canteens Data : ", data)
 
       if (!response.ok) {
         throw new Error(data.message || 'Failed to add canteen');
@@ -285,6 +362,7 @@ export default function College() {
 
       showToast('success', 'Success', 'Canteen added successfully');
       await fetchSelectedCanteens();
+
     } catch (error) {
       console.error('Add canteen error:', error.message);
       showToast('error', 'Error', error.message || 'Failed to add canteen');

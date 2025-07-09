@@ -1,6 +1,5 @@
 // LoginPg.jsx
 import { GoogleLogin } from '@react-oauth/google';
-// import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useState } from "react";
 import PropTypes from "prop-types";
 import "./NavCSS.css";
@@ -28,7 +27,8 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
       const isEmail = identifier.includes('@');
       const payload = isEmail ? { email: identifier, password } : { contact: identifier, password }
 
-      const response = await fetch('http://localhost:5000/api/v1/users/login', {
+      // const response = await fetch('http://localhost:5000/api/v1/users/login', {
+      const response = await fetch('https://canteen-order-backend.onrender.com/api/v1/users/login', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +75,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
   }
 
   // const handleGoogleLogin = async (credentialResponse) => {
-  //   const idtoken = credentialResponse.credential;
+  //   const userToken = credentialResponse.credential;
   //   try {
   //     // Handle successful login logic here
   //     const response = await fetch("/api/v1/users/google-login", {
@@ -84,7 +84,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
   //         "Content-Type": "application/json",
   //       },
   //       credentials: "include",
-  //       body: JSON.stringify({ idToken: idtoken })
+  //       body: JSON.stringify({ userToken: userToken })
   //     });
 
   //     const data = await response.json();
@@ -147,21 +147,23 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
         </div>
 
         <strong className="login-type">Login with Google</strong>
-        {/* <GoogleOAuthProvider clientId="113373390210-s6dqhs50dfqateg8vidagfv3nqs8j974.apps.googleusercontent.com"> */}
+
         <GoogleLogin
           onSuccess={async (res) => {
             console.log("Google Login Success:", res);
-            const idtoken = res.credential;
-            console.log(" idtoken : ", idtoken);
+            const userToken = res.credential;
+            console.log(" userToken : ", userToken);
+            localStorage.setItem('userToken', userToken)
             try {
               // Handle successful login logic here
               const response = await fetch("http://localhost:5000/api/v1/users/google-login", {
+              // const response = await fetch("https://canteen-order-backend.onrender.com/api/v1/users/google-login", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify({ idToken: idtoken })
+                body: JSON.stringify({ userToken: userToken })
               });
 
               if (!response.ok) {
@@ -193,11 +195,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
           }}
           onError={() => console.log("Login Failed")}
         />
-        {/* <GoogleLogin
-            onSuccess={handleGoogleLogin}
-            onError={() => console.log("Google Login Failed")}
-          /> */}
-        {/* </GoogleOAuthProvider> */}
+
         <p className="login-footer-text">
           Don't have an account?{" "}
           <span className="login-switch-link" onClick={onSignupClick}>

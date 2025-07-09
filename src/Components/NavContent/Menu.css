@@ -975,6 +975,52 @@
   font-size: 0.9em;
 }
 
+/* Full width animation container */
+.full-width-animation-container {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+  background-color: #f9f9f9;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  margin: 2rem 0;
+}
+
+.no-items-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px; /* Match your page's content width */
+  width: 100%;
+  padding: 0 20px;
+}
+
+/* Keep your existing animation styles */
+.animation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.no-items-message {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #555;
+  font-weight: 500;
+  max-width: 400px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .unavailable-banner {
@@ -984,6 +1030,15 @@
   
   .availability-status {
     font-size: 0.8em;
+  }
+
+  .full-width-animation-container {
+    padding: 1.5rem 0;
+  }
+  
+  .no-items-message {
+    font-size: 1rem;
+    padding: 0 15px;
   }
 }
 
