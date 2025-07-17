@@ -30,7 +30,7 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
     try {
       setLoading(true);
 
-      if (!userId || !token) {
+      if (!userId || !userToken) {
         throw new Error("User ID or token not found in local storage.");
       }
 
@@ -82,7 +82,7 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
     try {
       setLoading(true);
 
-      if (!userId || !token) {
+      if (!userId || !userToken) {
         throw new Error("User ID or token not found in local storage.");
       }
 
@@ -91,7 +91,7 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
         body: JSON.stringify(editData),
       });
