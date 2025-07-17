@@ -130,7 +130,9 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
 
         // Handle both array and object responses
         const collegeList = Array.isArray(data) ? data : data.colleges || [];
+        console.log("collegeList via fetchAllColleges: ", collegeList);
         setColleges(collegeList);
+        console.log("colleges via fetchAllColleges : ", colleges);
 
       } catch (error) {
         console.error("Error fetching colleges:", error);
