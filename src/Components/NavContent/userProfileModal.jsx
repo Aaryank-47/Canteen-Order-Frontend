@@ -49,8 +49,8 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
       }
 
       const data = await response.json();
-      console.log("data : ", data)
-
+      console.log("userdata via fetchUserData : ", data)
+      console.log("userdata via fetchUserData------- data.userProfile------ : ", data.userProfile)
       setUserData(data.userProfile);
       setEditData({
         name: data.userProfile.name || "",
