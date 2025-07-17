@@ -156,8 +156,8 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
             localStorage.setItem('userToken', userToken)
             try {
               // Handle successful login logic here
-              const response = await fetch("http://localhost:5000/api/v1/users/google-login", {
-              // const response = await fetch("https://canteen-order-backend.onrender.com/api/v1/users/google-login", {
+              // const response = await fetch("http://localhost:5000/api/v1/users/google-login", {
+              const response = await fetch("https://canteen-order-backend.onrender.com/api/v1/users/google-login", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

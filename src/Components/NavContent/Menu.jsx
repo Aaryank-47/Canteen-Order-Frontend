@@ -27,7 +27,7 @@ export default function Menu() {
 
   const loadAllFoodItems = async () => {
     try {
-      const response = await fetch(`/api/v1/foods/`, {
+      const response = await fetch(`https://canteen-order-backend.onrender.com/api/v1/foods/`, {
         method: 'GET'
       });
 
@@ -64,7 +64,7 @@ export default function Menu() {
     console.log("userToken via fetchCollegeCanteens : ", userToken);
 
     try {
-      const response = await fetch('api/v1/users/get-user', {
+      const response = await fetch('https://canteen-order-backend.onrender.com/api/v1/users/get-user', {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -92,7 +92,7 @@ export default function Menu() {
     console.log("userToken via fetchCollegeCanteens : ", userToken);
 
     try {
-      const response = await fetch('api/v1/colleges/get-college-canteens', {
+      const response = await fetch('https://canteen-order-backend.onrender.com/api/v1/colleges/get-college-canteens', {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -124,7 +124,7 @@ export default function Menu() {
     try {
       if (!adminId) return;
 
-      const response = await fetch(`api/v1/foods/canteens-menu/${adminId}`, {
+      const response = await fetch(`https://canteen-order-backend.onrender.com/api/v1/foods/canteens-menu/${adminId}`, {
         method: 'GET',
         credentials: 'include'
       });
@@ -173,7 +173,7 @@ export default function Menu() {
   const fetchSingleFoodItem = async (foodId) => {
     try {
       setIsSearching(true);
-      const response = await fetch(`/api/v1/foods/${foodId}`, {
+      const response = await fetch(`https://canteen-order-backend.onrender.com/api/v1/foods/${foodId}`, {
         method: 'GET',
       });
 
@@ -285,7 +285,7 @@ export default function Menu() {
     console.log("userToken via fetchCollegeCanteens : ", userToken);
 
     try {
-      const response = await fetch(`api/v1/orders/admins/${selectedCanteen}/place-order`, {
+      const response = await fetch(`https://canteen-order-backend.onrender.com/api/v1/orders/admins/${selectedCanteen}/place-order`, {
         method: 'POST',
         credentials: 'include',
         headers: {
