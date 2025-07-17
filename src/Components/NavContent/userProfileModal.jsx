@@ -125,6 +125,9 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
       try {
         const response = await fetch("/api/v1/colleges/all-colleges");
         const data = await response.json();
+        if (!data) {
+          console.error("No data received from colleges API", data.message);
+        }
         console.log("data via fetchAllColleges : ", data);
 
         if (!response.ok) throw new Error(data.message || "Failed to fetch colleges");
@@ -138,14 +141,19 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
         console.log("colleges via fetchAllColleges : ", colleges);
 
       } catch (error) {
+      
         console.error("Error fetching colleges:", error);
         setError("Failed to load colleges. Please try again later.");
+      
       } finally {
+      
         setCollegesLoading(false);
+      
       }
     };
 
     if (isOpen) fetchAllColleges();
+  
   }, [isOpen]);
 
 
