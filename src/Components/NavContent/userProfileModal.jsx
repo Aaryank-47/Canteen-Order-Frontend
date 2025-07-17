@@ -125,12 +125,15 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
       try {
         const response = await fetch("/api/v1/colleges/all-colleges");
         const data = await response.json();
+        console.log("data via fetchAllColleges : ", data);
 
         if (!response.ok) throw new Error(data.message || "Failed to fetch colleges");
 
         // Handle both array and object responses
         const collegeList = Array.isArray(data) ? data : data.colleges || [];
+        if(!collegeList) throw new Error("No colleges found")
         console.log("collegeList via fetchAllColleges: ", collegeList);
+        
         setColleges(collegeList);
         console.log("colleges via fetchAllColleges : ", colleges);
 
