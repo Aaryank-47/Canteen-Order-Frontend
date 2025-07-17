@@ -49,6 +49,9 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
       }
 
       const data = await response.json();
+      if(!data){
+        console.log("Unable to fetch user data : ", data.message);
+      }
       console.log("userdata via fetchUserData : ", data)
       console.log("userdata via fetchUserData------- data.userProfile------ : ", data.userProfile)
       setUserData(data.userProfile);
