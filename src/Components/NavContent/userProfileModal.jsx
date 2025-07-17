@@ -126,7 +126,7 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
     const fetchAllColleges = async () => {
       setCollegesLoading(true);
       try {
-        const response = await fetch("/api/v1/colleges/all-colleges");
+        const response = await fetch("https://canteen-order-backend.onrender.com/api/v1/colleges/all-colleges");
         const data = await response.json();
         if (!data) {
           console.error("No data received from colleges API", data.message);
