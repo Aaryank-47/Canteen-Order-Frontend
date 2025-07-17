@@ -34,7 +34,7 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
         throw new Error("User ID or token not found in local storage.");
       }
 
-      const response = await fetch(`/api/v1/profile/${userId}`, {
+      const response = await fetch(`https://canteen-order-backend.onrender.com/api/v1/profile/${userId}`, {
         method: "GET",
         credentials: "include",
         headers: {
