@@ -20,10 +20,10 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
     college: "",
   });
   const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("userToken");
+  const userToken = localStorage.getItem("userToken");
 
   console.log("Current userId:", userId);
-  console.log("Current token:", token);
+  console.log("Current token:", userToken);
 
   // Load user data from API
   const fetchUserData = async () => {
@@ -38,7 +38,7 @@ export default function UserProfileModal({ isOpen, userData: initialUserData, on
         method: "GET",
         credentials: "include",
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${userToken}`,
         },
       });
 

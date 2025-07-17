@@ -370,7 +370,7 @@ export default function Menu() {
 
 
   const renderShimmer = () => {
-    const shimmerCount = allfoodItems.length > 0 ? allfoodItems.length : 6; // Default to 6 if no items
+    const shimmerCount = allfoodItems.length > 0 ? allfoodItems.length : 6; 
 
     return (
       <div className="shimmer-container">
