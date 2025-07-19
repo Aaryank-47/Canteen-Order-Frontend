@@ -41,6 +41,7 @@ Built with **Vite + React.js**, this frontend offers an intuitive interface for 
 ```bash
 git clone https://github.com/your-username/canteen-order-frontend.git
 cd canteen-order-frontend
+
 📦 Install Dependencies
 npm install
 
