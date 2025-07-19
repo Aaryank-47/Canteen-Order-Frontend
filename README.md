@@ -1,8 +1,52 @@
-# React + Vite
+# 🍴 Canteen Order Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend interface** for the Canteen Order System — a web-based platform designed for college students to browse menus and place food orders conveniently. It interacts with backend APIs to provide a smooth and responsive user experience.
 
-Currently, two official plugins are available:
+## 🚀 Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Built with **Vite + React.js**, this frontend offers an intuitive interface for users to explore the menu, manage their cart, and track orders. Admins can log in to manage menu items and monitor orders in real-time. The UI is responsive and optimized for all device sizes.
+
+---
+
+## 🎯 Features
+
+- Student-friendly food browsing and cart system
+- Real-time order placement and updates
+- Role-based access (User/Admin)
+- Smooth integration with backend APIs
+- Responsive UI built with modern tools
+
+---
+
+## 🛠️ Tech Stack
+
+- **React.js** – Frontend framework
+- **Vite** – Fast build tool
+- **Axios** – API communication
+- **React Router** – Routing
+- **Tailwind CSS** or CSS Modules – Styling
+- **Lottie Animations** – For UI feedback
+
+---
+
+## 📦 Installation
+
+### 🔧 Prerequisites
+
+- Node.js (v16 or above)
+- npm or yarn
+
+### 📥 Clone the Repository
+
+```bash
+git clone https://github.com/your-username/canteen-order-frontend.git
+cd canteen-order-frontend
+📦 Install Dependencies
+npm install
+
+▶️ Running the App
+npm run dev
+
+To build the project for production:
+
+npm run build
