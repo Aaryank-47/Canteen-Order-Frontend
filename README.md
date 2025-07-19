@@ -48,6 +48,5 @@ npm install
 ▶️ Running the App
 npm run dev
 
-To build the project for production:
-
+🔨 To build the project for production
 npm run build
