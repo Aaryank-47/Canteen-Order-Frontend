@@ -10,7 +10,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleOverlayClick = (e) => {
+  const handleOverlayClick = (e) => {   
     if (e.target.classList.contains("login-modal-overlay")) onClose();
   };
 
