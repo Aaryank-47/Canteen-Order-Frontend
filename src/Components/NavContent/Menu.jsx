@@ -274,19 +274,28 @@ export default function Menu() {
   };
 
   const handlePlaceOrder = async () => {
-    if (!selectedCanteen) {
-      toast.error('Please select a canteen before placing your order');
-      return;
+    console.log("Selected Canteen: ", selectedCanteen);
+
+    const userId = localStorage.getItem('userId');
+    const userToken = localStorage.getItem('userToken');
+
+    // Check if logged in
+    if (!userId || !userToken) {
+      return toast.error('Please log in before placing your order');
     }
 
+    // Check if canteen is selected
+    if (selectedCanteen == null) {
+      return toast.error('Please select a canteen before placing your order');
+    }
+
+    // Check if any unavailable items
     const unavailableItems = cart.filter(item => !item.isActive);
     if (unavailableItems.length > 0) {
       toast.error(`Some items in your cart are no longer available: ${unavailableItems.map(i => i.foodName).join(', ')}`);
       return;
     }
 
-    const userId = localStorage.getItem('userId');
-    const userToken = localStorage.getItem('userToken');
     console.log("userToken via fetchCollegeCanteens : ", userToken);
 
     try {
@@ -298,7 +307,6 @@ export default function Menu() {
           'Authorization': `Bearer ${userToken}`,
           'Content-Type': 'application/json'
         },
-
         body: JSON.stringify({
           userId: userId,
           foodItems: cart.map(item => ({
@@ -309,12 +317,14 @@ export default function Menu() {
       });
 
       const data = await response.json();
-      if (!data) {
-        console.log("Unabble to place order data : ", data.message);
-      }
       console.log("place order datas : ", data);
+      if (!data) {
+        console.log("Unable to place order data : ", data.message);
+        toast.error("Unable to place order");
+      }
 
       if (!response.ok) {
+        toast.error(data.message || "Unable to place Order");
         throw new Error(data.message || "Unable to place Order");
       }
 
@@ -332,15 +342,15 @@ export default function Menu() {
       setOrderHistory([newOrder, ...orderHistory]);
 
       setCart([]);
-
       setCheckoutStep('confirmation');
       toast.success('Order placed successfully!');
 
     } catch (error) {
+      toast.error("Needed to login or select before placing an order");
       console.error("Error in Placing order", error);
-      toast.error(error.message || "Failed to place order");
     }
-  }
+  };
+
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -376,7 +386,7 @@ export default function Menu() {
 
 
   const renderShimmer = () => {
-    const shimmerCount = allfoodItems.length > 0 ? allfoodItems.length : 6; 
+    const shimmerCount = allfoodItems.length > 0 ? allfoodItems.length : 6;
 
     return (
       <div className="shimmer-container">
