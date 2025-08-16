@@ -26,6 +26,8 @@ export default function Menu() {
   const [totalFoodCount, setTotalFoodCount] = useState(0);
   const [typedMessage, setTypedMessage] = useState('');
   const [showAlert, setShowAlert] = useState(true);
+  const [showNoFood, setShowNoFood] = useState(false);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const loadAllFoodItems = async () => {
     try {
@@ -150,16 +152,31 @@ export default function Menu() {
   const handleCanteenSelect = async (e) => {
     const selectedCanteenId = e.target.value;
     setSelectedCanteen(selectedCanteenId);
+    setIsLoading(true); // Show shimmer immediately
+    setShowNoFood(false); // Reset no food state
 
     try {
       if (selectedCanteenId) {
         const menuData = await fetchCanteenMenu(selectedCanteenId);
         setAllFoodItems(menuData.foodslist || []);
+
+        // After data is loaded, check if we should show no food animation
+        if (!menuData.foodslist || menuData.foodslist.length === 0) {
+          setTimeout(() => {
+            setShowNoFood(true);
+            setIsLoading(false);
+          }, 2000);
+        } else {
+          setIsLoading(false);
+        }
       } else {
         await loadAllFoodItems();
+        setIsLoading(false);
       }
     } catch (error) {
       toast.error(`Failed to load menu: ${error.message}`);
+      setIsLoading(false);
+      setShowNoFood(true);
     }
   };
 
@@ -299,6 +316,7 @@ export default function Menu() {
   };
 
   const handlePlaceOrder = async () => {
+    setIsPlacingOrder(true);
     console.log("Selected Canteen: ", selectedCanteen);
 
     const userId = localStorage.getItem('userId');
@@ -371,6 +389,7 @@ export default function Menu() {
       toast.success('Order placed successfully!');
 
     } catch (error) {
+      setIsPlacingOrder(false);
       toast.error("Please select a canteen before placing an order");
       toast.error("OR check whether you are logged in or not");
       console.error("Error in Placing order", error);
@@ -441,7 +460,7 @@ export default function Menu() {
     if (isLoading) {
       return renderShimmer();
     }
-    if (!items || items.length === 0) {
+    if ((!items || items.length === 0) && showNoFood) {
       return (
         <div className="full-width-animation-container">
           <div className="no-items-content">
@@ -598,10 +617,17 @@ export default function Menu() {
       </div>
 
       <div className={`cart-preview ${isCartOpen ? 'active' : ''}`}>
-        <button className="close-cart" onClick={() => {
-          setIsCartOpen(false);
-          if (checkoutStep !== 'cart') setCheckoutStep('cart');
-        }}>×</button>
+        <button
+          className="close-cart"
+          onClick={() => {
+            setIsCartOpen(false);
+            if (checkoutStep !== 'cart') {
+              setCheckoutStep('cart');
+              setIsPlacingOrder(false);
+            }
+          }}>
+          ×
+        </button>
 
         {checkoutStep === 'cart' && (
           <>
@@ -689,8 +715,22 @@ export default function Menu() {
             </div>
 
             <div className="form-actions">
-              <button className="back-btn" onClick={() => setCheckoutStep('cart')}>Back to Cart</button>
-              <button className="place-order-btn" onClick={handlePlaceOrder}>Place Order</button>
+              <button
+                className="back-btn"
+                onClick={() => {
+                  setCheckoutStep('cart');
+                  setIsPlacingOrder(false);
+                }}
+              >
+                Back to Cart
+              </button>
+              <button
+                className={`place-order-btn ${isPlacingOrder ? 'placing-order' : ''}`}
+                onClick={handlePlaceOrder}
+                disabled={isPlacingOrder}
+              >
+                {isPlacingOrder ? 'Placing Order...' : 'Place Order'}
+              </button>
             </div>
           </div>
         )}
