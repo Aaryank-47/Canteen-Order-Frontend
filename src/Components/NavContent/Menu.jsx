@@ -24,6 +24,8 @@ export default function Menu() {
   const [availableCanteens, setAvailableCanteens] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totalFoodCount, setTotalFoodCount] = useState(0);
+  const [typedMessage, setTypedMessage] = useState('');
+  const [showAlert, setShowAlert] = useState(true);
 
   const loadAllFoodItems = async () => {
     try {
@@ -172,7 +174,30 @@ export default function Menu() {
     loadAllFoodItems();
     fetchUser();
     fetchCollegeCanteens();
-  }, []);
+
+    if (!showAlert) return;
+
+    const fullMessage = "Select a canteen to begin ordering";
+    let currentIndex = 0;
+
+    const typingInterval = setInterval(() => {
+      if (currentIndex <= fullMessage.length) {
+        setTypedMessage(fullMessage.substring(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(typingInterval);
+      }
+    }, 50); // Adjust speed as needed (milliseconds per character)
+
+    return () => clearInterval(typingInterval);
+  }, [showAlert]);
+
+  // Close the alert
+  const handleCloseAlert = () => {
+    setShowCanteenAlert(false);
+  };
+
+
 
   const fetchSingleFoodItem = async (foodId) => {
     try {
@@ -346,7 +371,8 @@ export default function Menu() {
       toast.success('Order placed successfully!');
 
     } catch (error) {
-      toast.error("Needed to login or select before placing an order");
+      toast.error("Please select a canteen before placing an order");
+      toast.error("OR check whether you are logged in or not");
       console.error("Error in Placing order", error);
     }
   };
@@ -473,6 +499,18 @@ export default function Menu() {
 
   return (
     <div className="menu-page">
+      {showAlert && (
+        <div className="canteen-alert-overlay">
+          <div className="canteen-alert-modal">
+            <button className="close-alert" onClick={() => setShowAlert(false)}>×</button>
+            <h3>Welcome!</h3>
+            <p className="typing-animation">{typedMessage}<span className="blinking-cursor">|</span></p>
+            <button className="alert-ok-btn" onClick={() => setShowAlert(false)}>
+              Got it!
+            </button>
+          </div>
+        </div>
+      )}
       <div className="menu-header">
         <h1>Student Specials</h1>
         <p>Budget-friendly meals that taste like home</p>

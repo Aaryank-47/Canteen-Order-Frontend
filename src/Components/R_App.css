@@ -138,9 +138,10 @@
         gap: 10px;
     }
 
-    .logo{
+    .logo {
         margin-right: 0%;
     }
+
     .nav-list {
         margin: 5px 10px 0px 0px;
         padding: 0px;
@@ -163,10 +164,12 @@
     .nav-list>li>a {
         font-size: 1.08rem;
     }
+
     #about-nav {
         text-align: center;
         width: 20%;
     }
+
     #oh-nav {
         text-align: center;
         width: 20.3%;
@@ -295,6 +298,7 @@
 
     /* When menu is active, slide it in */
     .nav-list.active {
+        top: 473px;
         transform: translateY(0);
         opacity: 1;
         visibility: visible;
@@ -461,5 +465,39 @@
 
     .line-text-line {
         margin-top: 90px;
+    }
+}
+
+@media (max-width: 409px){
+    .text{
+        font-size: 0.98rem;
+    }
+}
+
+@media (max-width: 372px){
+    .text{
+        font-size: 0.93rem;
+    }
+}
+@media (max-width: 364px){
+    .line-text-line{
+        gap: 2px;
+    }
+    .line{
+        width: 100%;
+        height: 1px;
+    }
+    .text{
+        font-size: 0.80rem;
+    }
+}
+
+@media (max-width: 350px){
+    .line-text-line{
+        margin-top: 100px;
+    }
+    .text{
+        width: 200%;
+        font-size: 0.8rem;
     }
 }

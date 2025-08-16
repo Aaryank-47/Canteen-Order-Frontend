@@ -3,6 +3,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import { useState } from "react";
 import PropTypes from "prop-types";
 import "./NavCSS.css";
+import { toast } from 'react-hot-toast';
 
 export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess }) {
   const [identifier, setIdentifier] = useState(""); // Can be email or phone
@@ -10,7 +11,7 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleOverlayClick = (e) => {   
+  const handleOverlayClick = (e) => {
     if (e.target.classList.contains("login-modal-overlay")) onClose();
   };
 
@@ -155,7 +156,6 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
             console.log(" userToken : ", userToken);
             localStorage.setItem('userToken', userToken)
             try {
-              // Handle successful login logic here
               // const response = await fetch("http://localhost:5000/api/v1/users/google-login", {
               const response = await fetch("https://canteen-order-backend.onrender.com/api/v1/users/google-login", {
                 method: "POST",
@@ -181,14 +181,23 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
 
               // const { user, userToken, userId } = data;
 
-              localStorage.setItem("userToken", data.userToken); 
+              localStorage.setItem("userToken", data.userToken);
               localStorage.setItem("userId", data.userId);
               localStorage.setItem("userData", JSON.stringify(data.user));
 
               // // Reflect login in UI
               onLoginSuccess(data.user);
               onClose();
-
+              toast.success("Logged in with Google!");
+              
+              setTimeout(() => {
+                alert("⚠️ Update your profile with College Name & Phone Number before placing an order.");
+                toast("Update your profile with College Name & Phone Number before placing an order.", {
+                  icon: "⚠️",
+                  position: "top-center"
+                });
+              }, 1000);
+              
             } catch (error) {
               console.error("Error during Google login:", error);
             }

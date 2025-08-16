@@ -72,7 +72,13 @@ const Home = () => {
                     </div>
                 </div>
 
-                <div className="line-text-line"><hr className="line" /><a href="/menu" className="text">SEE MORE OPTIONS</a><hr className="line" /></div>
+                <div className="line-text-line">
+                    <hr className="line" />
+                    <a href="/menu" className="text">
+                        🍴Explore the Full Menu
+                    </a>
+                    <hr className="line" />
+                </div>
 
             </div>
         </>
