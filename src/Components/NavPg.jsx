@@ -12,6 +12,8 @@ import SignupPg from "./SignupPg.jsx";
 import College from "./NavContent/College.jsx";
 import UserProfileModal from "./NavContent/userProfileModal.jsx";
 import "./R_App.css";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function NavPg() {
   const [isLoginOpen, setLoginOpen] = useState(false);
@@ -21,6 +23,7 @@ export default function NavPg() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -45,7 +48,7 @@ export default function NavPg() {
           const data = await response.json();
 
           if (!response.ok) {
-            throw new Error('Token verification failed',data.message);
+            throw new Error('Token verification failed', data.message);
           }
           console.log('Auth response:', response);
 
@@ -76,6 +79,25 @@ export default function NavPg() {
     setIsLoggedIn(true);
     setUserData(user);
     setLoginOpen(false);
+
+    const savedUser = JSON.parse(localStorage.getItem("userData"));
+    const clg = savedUser?.college;
+    console.log("College found in localStorage:", clg);
+
+    if (!clg || clg.trim() === "" || clg === null || clg === undefined) {
+      setTimeout(() => {
+      alert("⚠️ Update your profile with College Name & Phone Number before placing an order.");
+      toast("Update your profile with College Name & Phone Number before placing an order.", {
+        icon: "⚠️",
+        position: "top-center"
+      });
+    }, 1000);
+    
+      setIsProfileOpen(true);
+    } else {
+      navigate("/");
+    }
+
   };
 
   const handleLogout = async () => {
@@ -117,7 +139,6 @@ export default function NavPg() {
         <h1 className="logo">RESTRO</h1>
         <div className="hamburger" onClick={() => setMobileView(!isMobileView)}>
           {isMobileView ? <FaTimes /> : <FaBars />}
-          {/* {isMobileView ? <FaBars /> : <FaTimes />} */}
         </div>
         <ul className={`nav-list ${isMobileView ? 'active' : ''}`}>
           <li className="nav-item">
@@ -155,7 +176,7 @@ export default function NavPg() {
             >
               Order History
             </NavLink>
-          </li> 
+          </li>
           <li className="nav-item">
             <NavLink
               to="/info"

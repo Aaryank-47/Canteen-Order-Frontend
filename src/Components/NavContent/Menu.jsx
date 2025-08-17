@@ -4,7 +4,9 @@ import './Menu.css';
 // import thumbsDownAnimation from '../../assets/thumbs_down.json'
 import noFoodAnimation from '../../assets/NoFoods.json'
 import { Player } from '@lottiefiles/react-lottie-player';
-
+import { BiAddToQueue } from "react-icons/bi";
+import { BiSolidCartAdd } from "react-icons/bi";
+import { useRef } from "react";
 
 export default function Menu() {
   const [cart, setCart] = useState([]);
@@ -28,6 +30,31 @@ export default function Menu() {
   const [showAlert, setShowAlert] = useState(true);
   const [showNoFood, setShowNoFood] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const currentOrdersRef = useRef(null);
+
+
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        currentOrdersRef.current &&
+        !currentOrdersRef.current.contains(event.target)
+      ) {
+        setIsCurrentOrdersOpen(false);
+      }
+    }
+
+    if (isCurrentOrdersOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isCurrentOrdersOpen]);
+
 
   const loadAllFoodItems = async () => {
     try {
@@ -162,10 +189,14 @@ export default function Menu() {
 
         // After data is loaded, check if we should show no food animation
         if (!menuData.foodslist || menuData.foodslist.length === 0) {
-          setTimeout(() => {
-            setShowNoFood(true);
-            setIsLoading(false);
-          }, 2000);
+
+          setShowNoFood(true);
+          setIsLoading(false);
+
+          // setTimeout(() => {
+          //   setShowNoFood(true);
+          //   setIsLoading(false);
+          // }, 2000);
         } else {
           setIsLoading(false);
         }
@@ -367,7 +398,7 @@ export default function Menu() {
       }
 
       if (!response.ok) {
-        toast.error(data.message || "Unable to place Order");
+        toast.error("Unable to place Order");
         throw new Error(data.message || "Unable to place Order");
       }
 
@@ -390,8 +421,7 @@ export default function Menu() {
 
     } catch (error) {
       setIsPlacingOrder(false);
-      toast.error("Please select a canteen before placing an order");
-      toast.error("OR check whether you are logged in or not");
+      toast.error("Pick a canteen");
       console.error("Error in Placing order", error);
     }
   };
@@ -460,25 +490,25 @@ export default function Menu() {
     if (isLoading) {
       return renderShimmer();
     }
-    if ((!items || items.length === 0) && showNoFood) {
-      return (
-        <div className="full-width-animation-container">
-          <div className="no-items-content">
-            <Player
-              autoplay
-              loop
-              src={noFoodAnimation}
-              style={{ height: '200px', width: '200px' }}
-            />
-            <p className="no-items-message">
-              {selectedCanteen
-                ? "No active food items available from this canteen"
-                : "No items found"}
-            </p>
-          </div>
-        </div>
-      );
-    }
+    // if ((!items || items.length === 0) && showNoFood) {
+    //   return (
+    //     <div className="full-width-animation-container">
+    //       <div className="no-items-content">
+    //         <Player
+    //           autoplay
+    //           loop
+    //           src={noFoodAnimation}
+    //           style={{ height: '200px', width: '200px' }}
+    //         />
+    //         <p className="no-items-message">
+    //           {selectedCanteen
+    //             ? "No active food items available from this canteen"
+    //             : "No items found"}
+    //         </p>
+    //       </div>
+    //     </div>
+    //   );
+    // }
 
     return items.map(item => (
       <div key={item._id} className={`menu-item ${selectedCanteen && !item.isActive ? 'unavailable' : ''}`}>
@@ -535,7 +565,7 @@ export default function Menu() {
         <p>Budget-friendly meals that taste like home</p>
       </div>
 
-      <div className="search-container">
+      {/* <div className="search-container">
         <form onSubmit={handleSearch}>
           <input
             type="text"
@@ -560,7 +590,7 @@ export default function Menu() {
             {searchError}
           </div>
         )}
-      </div>
+      </div> */}
 
       <div className="filter-container">
         <label htmlFor="canteen-filter">Select canteen to view its menu:</label>
@@ -682,7 +712,7 @@ export default function Menu() {
 
             <div className="payment-options">
               <h4>Payment Method</h4>
-              {['cash', 'upi', 'card'].map(method => (
+              {['cash'].map(method => (
                 <label key={method} className="payment-option">
                   <input
                     type="radio"
@@ -768,7 +798,9 @@ export default function Menu() {
         )}
       </div>
 
-      <div className={`current-orders-preview ${isCurrentOrdersOpen ? 'active' : ''}`}>
+      <div
+        ref={currentOrdersRef}
+        className={`current-orders-preview ${isCurrentOrdersOpen ? 'active' : ''}`}>
         <button className="close-current-orders" onClick={() => setIsCurrentOrdersOpen(false)}>
           ×
         </button>
@@ -810,7 +842,8 @@ export default function Menu() {
 
       {cart.length > 0 && checkoutStep === 'cart' && (
         <button className="cart-toggle-btn" onClick={() => setIsCartOpen(!isCartOpen)}>
-          🛒 {totalItems}
+          {/* 🛒 {totalItems} */}
+          <BiSolidCartAdd /> {totalItems}
         </button>
       )}
 
@@ -821,7 +854,7 @@ export default function Menu() {
         {currentOrdersCount > 0 ? (
           <span className="orders-count">{currentOrdersCount}</span>
         ) : null}
-        📝 Orders
+        <BiAddToQueue />
       </button>
     </div>
   );

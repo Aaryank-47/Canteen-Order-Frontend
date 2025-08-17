@@ -1170,11 +1170,11 @@ li {
     position: relative;
 }
 
-li::before {
+/* li::before {
     content: "•";
     color: #007fbf;
     position: absolute;
     left: 0;
     font-size: 1.2rem;
     line-height: 1.2;
-}
+} */

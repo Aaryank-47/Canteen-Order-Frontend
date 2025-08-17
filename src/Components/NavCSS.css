@@ -1,6 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Bokor&display=swap'); */
-/* @import url('https://fonts.googleapis.com/css2?family=Bokor&family=Permanent+Marker&display=swap'); */
-/* @import url('https://st3.depositphotos.com/4431055/12920/i/450/depositphotos_129206658-stock-photo-wooden-texture-with-various-dishes.jpg'); */
+
 body {
   margin: 0%;
   padding: 0%;
@@ -13,14 +11,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Navbar CSS - Inspired by L'Epicurieux */
-
-
-/* Add this to your HTML head or CSS imports */
-/* @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap'); */
-
-
-
 
 /* Base Styles */
 .nav {
@@ -31,7 +21,7 @@ body {
   align-items: center;
   justify-content: space-evenly;
   height: 80px;
-  font-family: "Permanent Marker", cursive;
+  font-family: "Permanent Marker";
   font-weight: 400;
   background-color: #f5f5f5;
   padding: 10px 20px;

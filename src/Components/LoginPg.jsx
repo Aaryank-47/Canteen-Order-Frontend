@@ -51,9 +51,9 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
         throw new Error(data.message || 'Login FAILED');
       }
 
-      const { name, email, contact, _id } = data.user;
+      const { name, email, contact, _id, college } = data.user;
 
-      localStorage.setItem("userData", JSON.stringify({ name, email, contact, _id }));
+      localStorage.setItem("userData", JSON.stringify({ name, email, contact, _id, college }));
       localStorage.setItem('userId', data.userId);
       localStorage.setItem("userToken", data.userToken);
 
@@ -61,7 +61,8 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
       onLoginSuccess({
         name: data.user?.name,
         email: data.user?.email,
-        contact: data.user?.contact
+        contact: data.user?.contact,
+        college: data.user?.college
       });
       onClose();
 
@@ -189,14 +190,6 @@ export default function LoginPg({ isOpen, onClose, onSignupClick, onLoginSuccess
               onLoginSuccess(data.user);
               onClose();
               toast.success("Logged in with Google!");
-              
-              setTimeout(() => {
-                alert("⚠️ Update your profile with College Name & Phone Number before placing an order.");
-                toast("Update your profile with College Name & Phone Number before placing an order.", {
-                  icon: "⚠️",
-                  position: "top-center"
-                });
-              }, 1000);
               
             } catch (error) {
               console.error("Error during Google login:", error);

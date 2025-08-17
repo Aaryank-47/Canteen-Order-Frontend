@@ -4,6 +4,7 @@ import { BiLogoInstagram } from "react-icons/bi";
 import { PiXLogoBold } from "react-icons/pi";
 import { IoLogoFacebook } from "react-icons/io";
 import Feedback from "./Feedback";
+import "../App.css";
 import "./R_App.css";
 
 
