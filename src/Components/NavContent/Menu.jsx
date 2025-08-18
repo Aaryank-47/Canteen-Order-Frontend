@@ -305,40 +305,6 @@ export default function Menu() {
     }
   }, []);
 
-  const checkBeforeAddToCart = (item) => {
-    const userToken = localStorage.getItem('userToken');
-
-    if (!userToken) {
-      toast.error('Please login first to add items to cart', {
-        position: 'top-center',
-        style: {
-          background: '#ff4444',
-          color: '#fff',
-          fontSize: '16px',
-          padding: '16px'
-        },
-        duration: 3000
-      });
-      return false;
-    }
-
-    if (!selectedCanteen) {
-      toast.error('Please select a canteen first to view available items', {
-        position: 'top-center',
-        style: {
-          background: '#ff4444',
-          color: '#fff',
-          fontSize: '16px',
-          padding: '16px'
-        },
-        duration: 3000
-      });
-      return false;
-    }
-
-    return true;
-  };
-
   const addToCart = (item) => {
     const userToken = localStorage.getItem('userToken');
 
@@ -600,14 +566,14 @@ export default function Menu() {
           </div>
         </div>
         <div className="item-actions">
-        <button
-          className={`add-to-cart-btn ${!item.isActive || isDisabled ? 'disabled' : ''}`}
-          onClick={() => addToCart(item)}
+          <button
+            className={`add-to-cart-btn ${!item.isActive || isDisabled ? 'disabled' : ''}`}
+            onClick={() => addToCart(item)}
           // Remove the disabled attribute to allow clicks
-        >
-          {item.isActive ? 'Add +' : 'Unavailable'}
-        </button>
-      </div>
+          >
+            {item.isActive ? 'Add +' : 'Unavailable'}
+          </button>
+        </div>
       </div>
     ));
   };
