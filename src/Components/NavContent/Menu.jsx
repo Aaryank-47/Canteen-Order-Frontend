@@ -31,6 +31,8 @@ export default function Menu() {
   const [showNoFood, setShowNoFood] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const currentOrdersRef = useRef(null);
+  const [showLoginAlert, setShowLoginAlert] = useState(false);
+  const [showCanteenAlert, setShowCanteenAlert] = useState(false);
 
 
 
@@ -296,12 +298,91 @@ export default function Menu() {
     }
   }
 
+  useEffect(() => {
+    const userToken = localStorage.getItem('userToken');
+    if (!userToken) {
+      setShowLoginAlert(true);
+    }
+  }, []);
+
+  const checkBeforeAddToCart = (item) => {
+    const userToken = localStorage.getItem('userToken');
+
+    if (!userToken) {
+      toast.error('Please login first to add items to cart', {
+        position: 'top-center',
+        style: {
+          background: '#ff4444',
+          color: '#fff',
+          fontSize: '16px',
+          padding: '16px'
+        },
+        duration: 3000
+      });
+      return false;
+    }
+
+    if (!selectedCanteen) {
+      toast.error('Please select a canteen first to view available items', {
+        position: 'top-center',
+        style: {
+          background: '#ff4444',
+          color: '#fff',
+          fontSize: '16px',
+          padding: '16px'
+        },
+        duration: 3000
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const addToCart = (item) => {
-    if (!item.isActive) {
-      toast.error(`${item.foodName} is currently unavailable`);
+    const userToken = localStorage.getItem('userToken');
+
+    // Check if user is logged in
+    if (!userToken) {
+      toast.error('Please login first to add items to cart', {
+        position: 'top-center',
+        style: {
+          background: '#ff4444',
+          color: '#fff',
+          fontSize: '16px',
+          padding: '16px'
+        },
+        duration: 3000
+      });
+      setShowLoginAlert(true);
       return;
     }
 
+    // Check if canteen is selected
+    if (!selectedCanteen) {
+      toast.error('Please select a canteen first to view available items', {
+        position: 'top-center',
+        style: {
+          background: '#ff4444',
+          color: '#fff',
+          fontSize: '16px',
+          padding: '16px'
+        },
+        duration: 3000
+      });
+      setShowCanteenAlert(true);
+      return;
+    }
+
+    // Check if item is available
+    if (!item.isActive) {
+      toast.error(`${item.foodName} is currently unavailable`, {
+        position: 'top-center'
+      });
+      return;
+    }
+
+    // If all checks pass, add to cart
     const existingItem = cart.find(cartItem => cartItem._id === item._id);
     if (existingItem) {
       setCart(cart.map(cartItem =>
@@ -490,25 +571,10 @@ export default function Menu() {
     if (isLoading) {
       return renderShimmer();
     }
-    // if ((!items || items.length === 0) && showNoFood) {
-    //   return (
-    //     <div className="full-width-animation-container">
-    //       <div className="no-items-content">
-    //         <Player
-    //           autoplay
-    //           loop
-    //           src={noFoodAnimation}
-    //           style={{ height: '200px', width: '200px' }}
-    //         />
-    //         <p className="no-items-message">
-    //           {selectedCanteen
-    //             ? "No active food items available from this canteen"
-    //             : "No items found"}
-    //         </p>
-    //       </div>
-    //     </div>
-    //   );
-    // }
+
+    const userToken = localStorage.getItem('userToken');
+    const isDisabled = !userToken || !selectedCanteen;
+
 
     return items.map(item => (
       <div key={item._id} className={`menu-item ${selectedCanteen && !item.isActive ? 'unavailable' : ''}`}>
@@ -534,20 +600,51 @@ export default function Menu() {
           </div>
         </div>
         <div className="item-actions">
-          <button
-            className={`add-to-cart-btn ${!item.isActive ? 'disabled' : ''}`}
-            onClick={() => addToCart(item)}
-            disabled={!item.isActive}
-          >
-            {item.isActive ? 'Add +' : 'Unavailable'}
-          </button>
-        </div>
+        <button
+          className={`add-to-cart-btn ${!item.isActive || isDisabled ? 'disabled' : ''}`}
+          onClick={() => addToCart(item)}
+          // Remove the disabled attribute to allow clicks
+        >
+          {item.isActive ? 'Add +' : 'Unavailable'}
+        </button>
+      </div>
       </div>
     ));
   };
 
   return (
     <div className="menu-page">
+      {/* Login Alert */}
+      {showLoginAlert && (
+        <div className="alert-overlay">
+          <div className="alert-modal">
+            <h3>Login Required</h3>
+            <p>Please login first to add items to your cart.</p>
+            <button
+              className="alert-ok-btn"
+              onClick={() => setShowLoginAlert(false)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Canteen Selection Alert */}
+      {showCanteenAlert && (
+        <div className="alert-overlay">
+          <div className="alert-modal">
+            <h3>Select a Canteen</h3>
+            <p>Please select a canteen first to view available items.</p>
+            <button
+              className="alert-ok-btn"
+              onClick={() => setShowCanteenAlert(false)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
       {showAlert && (
         <div className="canteen-alert-overlay">
           <div className="canteen-alert-modal">
