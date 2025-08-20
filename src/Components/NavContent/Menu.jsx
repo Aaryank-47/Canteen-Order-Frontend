@@ -400,19 +400,20 @@ export default function Menu() {
     const userId = localStorage.getItem('userId');
     const userToken = localStorage.getItem('userToken');
 
-    // Check if logged in
     if (!userId || !userToken) {
+      setIsPlacingOrder(false);
       return toast.error('Please log in before placing your order');
     }
-
-    // Check if canteen is selected
+    
     if (selectedCanteen == null) {
+      setIsPlacingOrder(false);
       return toast.error('Please select a canteen before placing your order');
     }
 
     // Check if any unavailable items
     const unavailableItems = cart.filter(item => !item.isActive);
     if (unavailableItems.length > 0) {
+      setIsPlacingOrder(false);
       toast.error(`Some items in your cart are no longer available: ${unavailableItems.map(i => i.foodName).join(', ')}`);
       return;
     }
@@ -442,10 +443,13 @@ export default function Menu() {
       if (!data) {
         console.log("Unable to place order data : ", data.message);
         toast.error("Unable to place order");
+        setIsPlacingOrder(false);
+        return;
       }
 
       if (!response.ok) {
         toast.error("Unable to place Order");
+        setIsPlacingOrder(false);
         throw new Error(data.message || "Unable to place Order");
       }
 
@@ -470,6 +474,8 @@ export default function Menu() {
       setIsPlacingOrder(false);
       toast.error("Pick a canteen");
       console.error("Error in Placing order", error);
+    }finally{
+      setIsPlacingOrder(false);
     }
   };
 

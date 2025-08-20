@@ -14,6 +14,7 @@ import UserProfileModal from "./NavContent/userProfileModal.jsx";
 import "./R_App.css";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 
 export default function NavPg() {
   const [isLoginOpen, setLoginOpen] = useState(false);
@@ -24,6 +25,7 @@ export default function NavPg() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const navRef = useRef(null);
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -86,13 +88,13 @@ export default function NavPg() {
 
     if (!clg || clg.trim() === "" || clg === null || clg === undefined) {
       setTimeout(() => {
-      alert("⚠️ Update your profile with College Name & Phone Number before placing an order.");
-      toast("Update your profile with College Name & Phone Number before placing an order.", {
-        icon: "⚠️",
-        position: "top-center"
-      });
-    }, 1000);
-    
+        alert("⚠️ Update your profile with College Name & Phone Number before placing an order.");
+        toast("Update your profile with College Name & Phone Number before placing an order.", {
+          icon: "⚠️",
+          position: "top-center"
+        });
+      }, 1000);
+
       setIsProfileOpen(true);
     } else {
       navigate("/");
@@ -133,11 +135,37 @@ export default function NavPg() {
     setLoginOpen(false);
     setSignupOpen(false);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        navRef.current &&
+        !navRef.current.contains(event.target) &&
+        !event.target.closest(".hamburger")
+      ) {
+        setMobileView(false);
+      }
+    };
+
+    if (isMobileView) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileView]);
+
   return (
     <>
-      <nav className="nav">
+      <nav className="nav" ref={navRef}>
         <h1 className="logo">RESTRO</h1>
-        <div className="hamburger" onClick={() => setMobileView(!isMobileView)}>
+        <div
+          className="hamburger"
+          onClick={() => setMobileView(!isMobileView)
+          }>
           {isMobileView ? <FaTimes /> : <FaBars />}
         </div>
         <ul className={`nav-list ${isMobileView ? 'active' : ''}`}>
